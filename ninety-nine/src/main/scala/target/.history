@@ -1,0 +1,9 @@
+compile
+~run
+:cp
+cp
+print cp
+compile
+inspect scalaSOurce
+inspect scalaSource
+exit
