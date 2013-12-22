@@ -15,12 +15,23 @@ public class App
 {
     public static void main( String[] args )
     {
-    	runTreeBuild();
+    	runNCk();
+    }
+    
+    
+    private static void runNCk() {
+    	 Permutate p = new Permutate();
+         Object[] l = {1,2,3,4,5};
+         List<List<Object>> r = p.nCk(Arrays.asList(l),3);
+         System.out.println("Found " + r.size() + " permutations, should have " + p.calculateNCk(5, 3));
+         for(Object o : r) {
+         	System.out.println(o);
+         }
     }
     
     private static void runPermute(){
         Permutate p = new Permutate();
-        Object[] l = {1,2,3,4,5};
+        Object[] l = {1,2,3,4};
         List<List<Object>> r = p.permutate(Arrays.asList(l));
         for(Object o : r) {
         	System.out.println(o);
@@ -33,4 +44,8 @@ public class App
     	System.out.println(Tree.findNode(n, 4));
     	
     }
+
+    
+    
+    
 }

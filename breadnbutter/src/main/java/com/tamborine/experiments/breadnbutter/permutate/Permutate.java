@@ -53,4 +53,38 @@ public class Permutate {
 		}
 		return toReturn;
 	}
+	
+	
+	public int calculateNCk(int n, int k){
+		return factor(n)/(factor(k)*factor(n-k));
+	}
+	
+	private int factor(int val) {
+		if(val==1) return 1;
+		return val*factor(val-1);
+	}
+	
+	public List<List<Object>> nCk(List<Object> src, int k) {
+		List<List<Object>> toReturn = new ArrayList<List<Object>>();
+		int n = src.size();
+			List<Object> newPermutation = new ArrayList<Object>();
+			toReturn.addAll(rNCk(src.subList(0, n),k,newPermutation));
+		return toReturn;
+	}
+
+	private List<? extends List<Object>> rNCk(List<Object> subList,
+			int k, List<Object> newPermutation) {
+		List<List<Object>> toReturn = new ArrayList<List<Object>>();
+		if(newPermutation.size()==k) {
+			toReturn.add(newPermutation);
+			return toReturn;
+		}
+		
+		for(int i=0;i<subList.size();i++) {
+			List<Object> currentState = new ArrayList<Object>(newPermutation);
+			currentState.add(subList.get(i));
+			toReturn.addAll(rNCk(subList.subList(i+1, subList.size()), k, currentState));
+		}
+		return toReturn;
+	}
 }
