@@ -1,7 +1,7 @@
 package problems
 
 
-
+//A series of solutions for working with lists.
 class casematch extends ptrait {
 	def RunProblem() : Boolean = {
 
@@ -64,13 +64,35 @@ class casematch extends ptrait {
 		println(rotateLeft(3,toRotate))
 		println(rotateLeft(-2,toRotate))
 		println(toRotate.drop(3) ::: toRotate.take(endSlice-startSlice))
-		println("\nRemove kth element:")
+		println("\nRemove kth element (kth=3):")
+		println(toRotate)
 		println(removeKthElement(3,toRotate))
 		println("\nInsert element at:")
 		var toInsertInto = List('a, 'b, 'c, 'd);
 		println(insertAtRecursive(1,"new",0,toInsertInto))
 		println("\nCreate list of integer range 4-9")
 		println(createRangeListRecursive(4,9))
+		println("\nExtract random list:")
+		var toExtract = List('a, 'b, 'c, 'd, 'f, 'g, 'h)
+		println(randomSelect(3,0,toExtract))
+		println("\nLotto Draw, result:")
+		println(lotto(6,49))
+		println("\nRandom Permute:")
+		var randomPermuteList = List('a, 'b, 'c, 'd, 'e, 'f)
+		println("Using list: " + randomPermuteList)
+		println(radomPermute(randomPermuteList))
+		println("\nN choose K ")
+		var nckl = List('a, 'b, 'c, 'd,'e, 'f)
+		println("Using list: " + nckl)
+		println(nChooseK(nckl, 3));
+		println("\n Combinations of disjoint sublists ")
+		var djsl = List('a, 'b, 'c)
+		println("Using list: " + djsl)
+		println(disjointSubLists(List(2,1), djsl))	
+		println("Sort list be length of sublist.")
+		var listOfLists = List(List(1,2,3), List(1,2), List(1,2,3,4,5), List(1), List(1,2,3,4))
+		println("Using list " + listOfLists)
+		println(sortByLengthOfSubList(listOfLists))
 		return true;
 	}
 
@@ -191,7 +213,7 @@ class casematch extends ptrait {
 	}
 
 	def removeKthElement( kth : Int,ls : List[Any]) : (List[Any], Any) = {
-		(dropEveryNthFromList(ls, kth), ls(kth))
+		((ls zipWithIndex) map (x => if(x._2!=kth) x._1 else null) filter(x => x!=null), ls(kth))
 	}
 
 	def insertAtRecursive( at : Int, value: Any, index : Int, ls : List[Any]) : List[Any] = (at, index, ls) match {
@@ -203,6 +225,72 @@ class casematch extends ptrait {
 		case (from,end) if(from<end) => from :: createRangeListRecursive(from+1, end)
 		case (_,_) => List(from)
 	}
+
+	def randomSelect(number : Int, count : Int,  ls : List[Any]) : List[Any] = (number, count, ls ) match {
+		case(n,c,ls) if(c==n) => List()
+		case(n,c,ls) if(c<n) => val (rest, e) = removeKthElement(scala.util.Random.nextInt(ls.length),ls) ; e :: randomSelect(n,c+1,rest) 
+		case (_,_,_) => Nil
+	}
+
+	def lotto(number : Int, size : Int) : List[Any] = {
+		randomSelect(number, 0, 0 to size toList)	
+	}
+
+	def radomPermute(ls:List[Any]) : List[Any] = {
+		randomSelect(ls.length, 0, ls)
+	}
+
+	def nChooseK(ls:List[Any], k:Int) : List[List[Any]] = {
+		return recursiveNChooseK(ls, List(), k);
+	}
+
+	def recursiveNChooseK(subList:List[Any], newPermutation : List[Any], k:Int) : List[List[Any]] = {
+		var toReturn = List[List[Any]]();
+		if(newPermutation.length==k) {
+			toReturn ::= newPermutation
+			return toReturn;
+		}
+		var i = 1;
+		for(a <- subList) {
+			var currentState = List(a)
+			if(newPermutation.length>0) {
+				currentState = a :: newPermutation.slice(0,newPermutation.length);
+			}
+			toReturn = toReturn ++ recursiveNChooseK(subList.slice(i,subList.length),currentState,k);
+			i += 1;
+		} 
+		toReturn;
+	}
+
+	def disjointSubLists(groups:List[Int], values : List[Any]) : List[List[List[Any]]] = {
+		
+		//for the head of groups, generate all permutations p for i from values
+		var Ks = nChooseK(values,groups.head);
+		if(groups.length==1) return List(Ks);
+		//for each generated permutation p, remove all items of p from values, and recurse with the tail 
+		//of groups
+		var toReturn = List[List[List[Any]]]();
+		Ks foreach {(x) => disjointSubLists(groups.tail, values diff (x)) foreach {(y)=> toReturn = toReturn ++ List(x::y)} }
+		toReturn;
+	}
+
+	def sortByLengthOfSubList(values : List[List[Any]]) : List[List[Any]] = {
+		if(values.length<2) return values;
+		var subLists = values splitAt (values.length / 2)
+		mergeLists(sortByLengthOfSubList(subLists._1),  sortByLengthOfSubList(subLists._2));
+	}
+
+	def mergeLists(leftList : List[List[Any]], rightList : List[List[Any]]) : List[List[Any]] = {
+		
+		(leftList, rightList) match {
+			case(Nil,_) => rightList;
+			case(_,Nil) => leftList;
+			case(_,_) if(leftList.head.length < rightList.head.length) => leftList.head :: mergeLists(leftList.tail, rightList)
+			case(_,_) if(leftList.head.length > rightList.head.length) => rightList.head :: mergeLists(rightList.tail, leftList)
+
+		}
+	}
+
 }
 
 
