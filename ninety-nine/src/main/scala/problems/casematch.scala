@@ -90,9 +90,11 @@ class casematch extends ptrait {
 		println("Using list: " + djsl)
 		println(disjointSubLists(List(2,1), djsl))	
 		println("Sort list be length of sublist.")
-		var listOfLists = List(List(1,2,3), List(1,2), List(1,2,3,4,5), List(1), List(1,2,3,4))
+		var listOfLists = List(List(1,2,3), List(1,2), List(1,2,3),List(1,2,3,4,5), List(1), List(1,2,3,4))
 		println("Using list " + listOfLists)
-		println(sortByLengthOfSubList(listOfLists))
+		println(sortByF(listOfLists,{(x,y) => x.head.length>y.head.length}))
+		println(" By list frequency")
+		println(sortByFrequencyOfItems(listOfLists))
 		return true;
 	}
 
@@ -274,21 +276,28 @@ class casematch extends ptrait {
 		toReturn;
 	}
 
-	def sortByLengthOfSubList(values : List[List[Any]]) : List[List[Any]] = {
+	def sortByF(values : List[List[Any]], f : (List[List[Any]], List[List[Any]]) => Boolean) : List[List[Any]] = {
 		if(values.length<2) return values;
 		var subLists = values splitAt (values.length / 2)
-		mergeLists(sortByLengthOfSubList(subLists._1),  sortByLengthOfSubList(subLists._2));
+		mergeLists(sortByF(subLists._1,f),  sortByF(subLists._2,f), f);
 	}
 
-	def mergeLists(leftList : List[List[Any]], rightList : List[List[Any]]) : List[List[Any]] = {
+	def mergeLists(leftList : List[List[Any]], rightList : List[List[Any]], f : (List[List[Any]], List[List[Any]]) => Boolean) : List[List[Any]] = {
 		
 		(leftList, rightList) match {
 			case(Nil,_) => rightList;
 			case(_,Nil) => leftList;
-			case(_,_) if(leftList.head.length < rightList.head.length) => leftList.head :: mergeLists(leftList.tail, rightList)
-			case(_,_) if(leftList.head.length > rightList.head.length) => rightList.head :: mergeLists(rightList.tail, leftList)
+			case(_,_) if(f(leftList,rightList)) => leftList.head :: mergeLists(leftList.tail, rightList,f)
+			case(_,_) if(!f(leftList,rightList)) => rightList.head :: mergeLists(rightList.tail, leftList,f)
 
 		}
+	}
+
+	def sortByFrequencyOfItems(values : List[List[Any]]) : List[List[Any]] = {
+		var valueMap = (values groupBy { (x) => x.length}) 
+		//println(valueMap)
+		sortByF(values, {(x,y)=>  (((valueMap get x.head.length) get).length)>(((valueMap get y.head.length) get).length)});
+		//sortByF(values, {(x,y)=> println(x.length + ">" + y.length); (x.length>y.length)});
 	}
 
 }
