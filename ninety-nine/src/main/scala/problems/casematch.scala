@@ -5,14 +5,14 @@ package problems
 class casematch extends ptrait {
 	def RunProblem() : Boolean = {
 
-		val l = 1 to 1000 toList;
+		val l = 7 to 1001 toList;
 		println("\nFind the head of the list expecting value of 7: ");
 		println(matchHead(l))
-		println("\nFind the tail of the list expecting value of 16: ");
+		println("\nFind the tail of the list expecting value of 1001: ");
 		println(matchTail(l))
-		println("\nFind the penultimate value expecting 15: ")
+		println("\nFind the penultimate value expecting 1000: ")
 		println(matchPenultimate(l))
-		println("\nFind the number of elements in the list, expecting 10: ")
+		println("\nFind the number of elements in the list, expecting 995: ")
 		println(listLength(l))
 		println("\nList reverse, current head:")
 		println(matchHead(l))
