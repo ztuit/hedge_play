@@ -59,3 +59,8 @@ exit
 clean
 ~ run
 clean
+~ run
+~sbt
+~run
+clean
+exit
