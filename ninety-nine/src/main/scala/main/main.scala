@@ -1,5 +1,5 @@
 package main 
-import problems._
+import problems._ 
 
 object RunProblems { def main(args: Array[String])  { 
 						//var one = new one();
@@ -14,6 +14,8 @@ object RunProblems { def main(args: Array[String])  {
 						//casematch.RunProblem();
 						//var l1 = List('a,'b,'c)
 						//println(P26.combinations(2,l1));
-						var ae = ArithmeticExercises;
-						ae.RunProblems();
- }}
+						//var ae = ArithmeticExercises;
+						//ae.RunProblems();
+						BinaryTrees.RunProblems();
+ }
+}
