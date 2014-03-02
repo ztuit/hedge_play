@@ -16,6 +16,6 @@ object RunProblems { def main(args: Array[String])  {
 						//println(P26.combinations(2,l1));
 						//var ae = ArithmeticExercises;
 						//ae.RunProblems();
-						BinaryTrees.RunProblems();
+						Graph.RunProblems();
  }
 }
