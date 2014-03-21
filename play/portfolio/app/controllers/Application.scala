@@ -10,7 +10,7 @@ object Application extends Controller {
   }
 
   def login = Action {
-  	 Ok(views.html.login("Login")("Login here"))
+  	 Ok(views.html.login())
   }
 
 }

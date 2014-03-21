@@ -25,8 +25,11 @@ object RiakClientWrapper {
 		}
 	}
 
-	def keyExists(bucket : String, key : String) : Boolean = {
-		client.fetchBucket(bucket).execute.fetch(key).execute!=null
+	def fetchValue(bucket : String, key : String) : Option[IRiakObject] = {
+		client.fetchBucket(bucket).execute.fetch(key).execute match {
+			case v : IRiakObject => Some(v)
+			case _ => None
+		}
 	}
 
 

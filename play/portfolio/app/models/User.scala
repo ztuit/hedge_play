@@ -41,18 +41,32 @@ object User  {
 		)
 	}
 
+	def checkCredentials(u : User ) : Try[User] = {
+
+		RiakClientWrapper.fetchValue("User", u.userName) match {
+			case Some(ruser : IRiakObject) =>  User.fromJson(Json.parse(ruser.getValueAsString)) match {
+				case Some(user) =>  if(Crypto.encryptAES(u.password)==user.password) Success(u) else Failure(UserException(0,"Bad credentials"))
+				case None => Failure(UserException(0,"Bad Credentials"))
+			}
+			case None => Failure(UserException(0,"Bad Credentials"))
+		}
+	}
+
 	/**
 	 * Validate a new user, check key doesn't already exist and email is 
 	 * valid. Will return a string in the event of a problem, otherwise none
 	 **/ 
 	def validateNewUser(u : User) : Try[User] = {
-		if(RiakClientWrapper.keyExists("User", u.userName)==true) {
+		if(RiakClientWrapper.fetchValue("User", u.userName).isDefined==true) {
 			Failure(UserException(2,"user name already exists"))
 		} else {
 			Success(u)
 		}
 	}
 
+	/**
+	 * Send the user an email using the email plugin
+	**/
 	def sendUserEmail(u : User)  {
 		val mail = use[MailerPlugin].email
 		mail.setSubject("mailer")

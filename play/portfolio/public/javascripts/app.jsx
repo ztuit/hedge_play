@@ -30,7 +30,7 @@ var validationMessage = React.createClass({
 
 var successMessage = React.createClass({
 	render : function() {
-    	return <div><label>User Succesfully Created</label> <a href="s">Login</a></div>;
+    	return <div><label>User Succesfully Created</label> <a href="/login">Login</a></div>;
 	}
 });
 
