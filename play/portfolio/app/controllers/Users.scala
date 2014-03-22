@@ -7,6 +7,9 @@ import models.UserException
 import play.api.libs.json._
 import scala.util.Success
 import scala.util.Failure
+import java.util.Calendar
+import java.text.SimpleDateFormat
+
 
 
 object Users extends Controller {
@@ -52,12 +55,16 @@ object Users extends Controller {
 
 	  			User.fromJson(json) match {
 		  			case Some(user) => User.checkCredentials(user) match {
-		  				case Success(user) => Ok(Json.toJson("success")).withSession("connectedAs" -> user.userName).as("application/json");
-		  				case Failure(e)	=> BadRequest(Json.toJson(0));
+		  				case Success(user) => Ok(Json.toJson("success")).withSession("connectedAs" -> Json.stringify(Json.obj("user" ->   user.userName, "time" -> (new java.text.SimpleDateFormat("E HH:mm a")).format(Calendar.getInstance.getTime)))).as("application/json");
+		  				case Failure(e)	=> Unauthorized(Json.toJson(0));
 		  			}
 		  			case None => BadRequest(Json.toJson(4));
 	  			}
 	  	}
+	}
+
+	def logout(key : String) = Action {
+		Ok(Json.toJson("success")).withSession("connectedAs" -> "").as("application/json");
 	}
 
 }

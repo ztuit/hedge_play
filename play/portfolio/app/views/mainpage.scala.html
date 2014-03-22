@@ -1,9 +1,10 @@
 
+
 <!DOCTYPE html>
 
 <html>
     <head>
-        <title>Login Page</title>
+        <title>Main</title>
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
         <script src="@routes.Assets.at("javascripts/jquery/jquery-2.1.0.js")" type="text/javascript"></script>
@@ -11,11 +12,13 @@
         <script src="@routes.Assets.at("javascripts/backbone/backbone-1.1.2.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/react/react-with-addons.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/react/JSXTransformer.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("javascripts/reactapp/components/login.jsx")" type="text/jsx"></script>
-        <script src="@routes.Assets.at("javascripts/reactapp/pages/login_page.jsx")" type="text/jsx"></script>
+        <script src="@routes.Assets.at("javascripts/reactapp/components/user.jsx")" type="text/jsx"></script>
+        <script src="@routes.Assets.at("javascripts/reactapp/components/main_menu.jsx")" type="text/jsx"></script>
+        <script src="@routes.Assets.at("javascripts/reactapp/pages/main_page.jsx")" type="text/jsx"></script>
     </head>
     <body>
-    	<div id="loginForm"></div>
-    	<div id="messages"/></div>
+        <div id="user_details"></div></br>
+        <div id="main_menu"></div><br/>
+        <div id="content"></div>
     </body>
 </html>

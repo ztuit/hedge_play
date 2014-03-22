@@ -1,0 +1,1 @@
+Files in this directory map to a html page being viewed. Normally the statements in these files would be in the html pages themselves, but this doesn't seem to sit well with the react annotations.

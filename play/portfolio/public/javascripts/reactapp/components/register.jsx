@@ -2,24 +2,7 @@
  * @jsx React.DOM
  */
 
-var registerRouter = Backbone.Router.extend({
-	routes : {
-		"error?reason=:x" : "error",
-		"success" : "success"
-	},
-	error : function() {
-		React.renderComponent(
-			<validationMessage reason={arguments}/>,
-			document.getElementById("message")
-			);
-	},
-	success : function() {
-		React.renderComponent(
-			<successMessage/>,
-			document.getElementById("message")
-			);		
-	}
-});
+
 
 var validationMessage = React.createClass({
 	reasonCodes : ["","Not all fields Filled out", "User name already taken", "DB Error"],
@@ -30,7 +13,7 @@ var validationMessage = React.createClass({
 
 var successMessage = React.createClass({
 	render : function() {
-    	return <div><label>User Succesfully Created</label> <a href="/login">Login</a></div>;
+    	return <div><label>User Succesfully Created</label></div>;
 	}
 });
 
@@ -68,13 +51,16 @@ var createUserForm = React.createClass({
     			<label>User Name:</label><input type="text" valueLink={this.linkState('name')}/><br/>
     			<label>Password: </label><input type="password" valueLink={this.linkState('password')}/><br/>
     			<label>Email:</label><input type="text" valueLink={this.linkState('email')}/><br/>
-    			<input type="button" value="Create User" onMouseUp={this.handleSubmit}/>
+    			<input type="button" value="Create User" onMouseUp={this.handleSubmit}/><br/>
+    			<label>Already have an account?</label> <a href="/login">Login Here</a>
+    			<br/>
+    			
     		</div>;
   	}
 });
 
-var pageRouter = new registerRouter();
-Backbone.history.start();
+
+
 
 UserModel = Backbone.Model.extend({
 	defaults :{
@@ -95,7 +81,3 @@ UserModel = Backbone.Model.extend({
 	}
 });
 
-React.renderComponent(
-  <createUserForm router={pageRouter}/>,
-  document.getElementById("main")
-);

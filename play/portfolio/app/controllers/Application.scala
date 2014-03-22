@@ -13,4 +13,17 @@ object Application extends Controller {
   	 Ok(views.html.login())
   }
 
+  def mainpage = Action {
+  	Ok(views.html.mainpage())
+  }
+
+  def connected(id : String) = Action {
+  	request =>
+	  request.session.get("connectedAs").map { user =>
+	    Ok(user).as("application/json")
+	  }.getOrElse {
+	    Unauthorized("Oops, you are not connected")
+	  }
+  }
+
 }
