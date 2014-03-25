@@ -26,7 +26,7 @@ object Users extends Controller {
 
   		User.fromJson(json) match {
   				case Some(user) => User.validateNewUser(user) match {
-  									case Success(user) => User.saveUser(user) match { 
+  									case Success(user) => User.newUser(user) match { 
   															case Success(s) => Ok(Json.toJson(s)).as("application/json");
   															case Failure(e) => BadRequest("Failed to save new user");
   															}
@@ -64,7 +64,8 @@ object Users extends Controller {
 	}
 
 	def logout(key : String) = Action {
-		Ok(Json.toJson("success")).withSession("connectedAs" -> "").as("application/json");
+		
+		Ok(Json.toJson("success")).withNewSession.as("application/json");
 	}
 
 }

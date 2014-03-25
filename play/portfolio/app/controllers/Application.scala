@@ -10,7 +10,7 @@ object Application extends Controller {
   }
 
   def login = Action {
-  	 Ok(views.html.login())
+  	 Ok(views.html.login("login"))
   }
 
   def mainpage = Action {
@@ -25,5 +25,7 @@ object Application extends Controller {
 	    Unauthorized("Oops, you are not connected")
 	  }
   }
+
+
 
 }

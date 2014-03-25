@@ -39,7 +39,8 @@ var createUserForm = React.createClass({
 		var self = this;			
 		userC.save(null, {
 			success: function (model, response) {
-        		self.props.router.navigate("success", {trigger : true}) },
+        		self.props.router.navigate("success", {trigger : true}) 
+        	},
     		error: function (model, response) {
     			self.props.router.navigate("error?reason=" + response.responseText, {trigger : true})  
     	} });

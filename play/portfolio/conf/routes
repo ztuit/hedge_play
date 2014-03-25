@@ -17,3 +17,8 @@ GET    	/logout/:key				controllers.Users.logout(key : String)
 GET     /register				    controllers.Users.register
 GET 	/connected/:id				controllers.Application.connected(id : String)
 GET     /main						controllers.Application.mainpage
+GET     /user/profile/:key			controllers.UserProfileController.get(key : String)
+PUT    	/user/profile/:key          controllers.UserProfileController.save(key : String)
+GET     /user/profiles				controllers.UserProfileController.all
+GET     /messages/private			controllers.PrivateMessageThreadController.all
+POST    /messages/private			controllers.PrivateMessageThreadController.create

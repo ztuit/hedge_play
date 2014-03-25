@@ -5,33 +5,42 @@ var MainRouter = Backbone.Router.extend({
 	routes : {
 		"profile" : "profile",
 		"users" : "users",
-		"portfolio" : "portfolio"
+		"portfolio" : "portfolio",
+		"privatemessages" : "privatemessages"
 	},
 	profile : function() {
 		React.renderComponent(
-			<userProfile/>,
+			<userProfile id={userSS.state.name}/>,
 			document.getElementById("content")
 			);
 	},
 	users : function() {
 		React.renderComponent(
-			<usersView/>,
-			document.getElementById("userlist")
+			<userProfileList url="/user/profiles"/>,
+			document.getElementById("content")
 			);		
 	},
 	portfolio : function() {
 		React.renderComponent(
 			<portfolio/>,
-			document.getElementById("portfolio")
-			);		
+			document.getElementById("content")
+			);	
+	},
+	privatemessages : function() {
+		React.renderComponent(
+			<messageViewer url="/messages/private"/>,
+			document.getElementById("content")
+			);
 	}
 });
 
 var mainRouter = new MainRouter();
 Backbone.history.start();
 
+var userSS = new userSnapshot();
+
 React.renderComponent(
-  <userSnapshot />,
+  userSS,
   document.getElementById("user_details")
 );
 

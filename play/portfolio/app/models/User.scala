@@ -80,15 +80,16 @@ object User  {
 	/**
 	 * Push a user into Riak
 	 **/
-	def saveUser( u : User ) : Try[String] = {
+	def newUser( u : User ) : Try[String] = {
 		var newUser = u.copy(password = Crypto.encryptAES(u.password))
-		val riakFut = RiakClientWrapper.store("User",u.userName,Json.toJson(newUser).toString) 
+		val riakFut = RiakClientWrapper.store("User",u.userName,Json.stringify(Json.toJson(newUser))) 
 		Await.result(riakFut, 500 millis)
 		riakFut value match {
 			case Some(Success(_)) => Success("Saved successfully")
 			case Some(Failure(e)) => Failure(e)
 			case None => Failure(UserException(3,"User save failed"))
 		}
+		UserProfile.newProfile(u.userName);
 	}
 
 
@@ -119,6 +120,11 @@ object User  {
       			)
 	}
 
+	/**
+	 * Implcitis for loading and saving, currently a little 
+	 * pointless as the client recieves as json, and the
+	 * db stores as json.
+	 **/
 	implicit val userReads: Reads[User] = (
   		(__ \ "name").read[String] and
   		(__ \  "email").read[String] and
