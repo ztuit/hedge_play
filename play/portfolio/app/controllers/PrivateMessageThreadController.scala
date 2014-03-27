@@ -13,16 +13,23 @@ object PrivateMessageThreadController extends Controller {
 	def create = Action(BodyParsers.parse.json)  {
 		request =>
 		request.body.validate[PrivateMessageThread] match {
-			case s : JsSuccess[PrivateMessageThread] => PrivateMessageThread.create(s.get, request.session.get("connectedAs").get) match {
+			case s : JsSuccess[PrivateMessageThread] =>  PrivateMessageThread.create(s.get, (Json.parse(request.session.get("connectedAs").get) \ "user").as[String]) match {
 				case Success(_) => Ok(Json.obj("result" ->   "success"))
-				case _ => BadRequest(Json.stringify(Json.obj("result" ->   "Unable to save user")));
+				case Failure(_) => BadRequest(Json.stringify(Json.obj("result" ->   "Unable to save message")));
 			}
 			case _ => BadRequest(Json.stringify(Json.obj("result" ->   "Unable to parse user")));
 		}
 	}
 
 	def all = Action {
-		Ok(Json.toJson("success")).withNewSession.as("application/json");
+		request =>
+		PrivateMessageThread.all((Json.parse(request.session.get("connectedAs").get) \ "user").as[String]) match {
+			case Success( x@_) => Ok(Json.toJson(x)).as("application/json")
+			case Failure(_) => BadRequest(Json.stringify(Json.obj("result" ->   "Unable to load messages")));
+		}
+		
 	}
+
+
 
 }

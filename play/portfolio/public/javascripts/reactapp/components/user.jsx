@@ -162,7 +162,7 @@ UserProfileModel = Backbone.Model.extend({
  var userProfileView = React.createClass({
 	requestMessageEntry : function() {
 		React.renderComponent(
-  			<messageSender recipient={this.props.profile.username} />,
+  			<messageSender recipient={this.props.profile.username} previous=""/>,
   			document.getElementById("content")
 		);
 	},

@@ -7,15 +7,15 @@
  **/
 var messageViewer = React.createClass({
 	 getInitialState: function() {
-    	return {threads: []};
+    	return {threads: [[]]};
   	},
     componentWillMount: function() {
+    	var self = this;
 	    $.ajax({
 	      url: this.props.url,
 	      dataType: 'json',
 	      success: function(data) {
-
-	        this.setState({data: data});
+	        self.setState({threads: data});
 	        
 	      }.bind(this),
 	      error: function(xhr, status, err) {
@@ -24,38 +24,54 @@ var messageViewer = React.createClass({
 	    });
   	}, 	
 	render : function() {
-		var messageThread = this.state.threads.map(function (thread) {
-	      return <messageThread entry={thread} />;
+		var mThread = this.state.threads.map(function (thread) {
+			if(thread.length>0) {
+	      		return <messageThread entries={thread} />;
+	      	} {
+	      		return <div></div>;
+	      	}
 	    });
-    	return <div class="messageViewer">
+    	return <div className="messageViewer">
     				<label>Current Message Threads</label><br/><br/>
-    				{messageThread}
+    				{mThread}
     			</div>
 	}
 });
 
 var messageThread = React.createClass({
-	
+
+	reply : function () {
+		var sub = "re:" + this.props.entries[this.props.entries.length-1].subject
+		
+		React.renderComponent(
+  			<messageSender recipient={this.props.entries[this.props.entries.length-1].sender} subject={sub} previous={this.props.entries[this.props.entries.length-1].key}/>,
+  			document.getElementById("content")
+		);
+	},
 	render : function() {
-	    var messageEntries = this.state.thread.entries.map(function (messageEntry) {
-	      return <messageEntry entry={messageEntry} />;
+		
+	    var messageEntries = this.props.entries.map(function (messageEnt) {
+	      return <messageEntry entry={messageEnt} />;
 	    });
-    	return 	<div class="messageThread">
-    				<label>Contributors: {this.state.thread.contributors}</label>
-    				<label>Subject:{this.state.thread.subject}</label>
+	   //messageEntries[messageEntries.length-1].props.subject})
+    	return <div className="messageThread">
     				{messageEntries}
-    			</div>
+    	    		<input type="button" value="reply" onMouseUp={this.reply} />
+    			</div>;
+
 	}
 });
 
 var messageEntry = React.createClass({
-	render : function() {
 
-    	return 	<div class="messageEntry">
-    				<label>By: {this.state.entry.contributor}</label>
-    				<label>Content:</label>
-    				<textarea value={this.state.entry.subject} readOnly/>
-    			</div>
+	render : function() {
+    	return 	<div className="messageEntry">
+    	 			<label>To:</label><label>{this.props.entry.recipient}</label><br/>
+    				<label>From: {this.props.entry.sender}</label><br/>
+    				<label>From: {this.props.entry.sent}</label><br/>
+    				<label>Subject:</label><label>{this.props.entry.subject} </label><br/>
+    				<textarea value={this.props.entry.content} readOnly/><br/>
+    			</div>;
 	}
 });
 
@@ -63,20 +79,25 @@ var messageEntry = React.createClass({
  * Component for sending messages to other uses
  **/
  var messageSender = React.createClass({
+ 	mixins: [React.addons.LinkedStateMixin],
 	getInitialState: function() {
     	return {
-    			subject : null,
-    			recipent : [],
-    			from : null,
-    			content : null,
-    			into : null
+    			key : "",
+    			subject : this.props.subject,
+    			recipient : this.props.recipient,
+    			sender : "",
+    			content : "",
+    			sent : "",
+    			previous : this.props.previous
     			};
   	},
   	sendMessage : function () {
   		var message = new messageModel();
+  		message.set("key", "");
+  		message.set("previous", this.state.previous);
   		message.set("recipient", this.props.recipient);
   		message.set("subject", this.state.subject);
-  		message.set("content", this.state.content)
+    	message.set("content", this.state.content);
   		var self = this;
   		message.save(null, {
 			success: function (model, response) {
@@ -87,10 +108,10 @@ var messageEntry = React.createClass({
     	} });
   	},
  	render : function() {
- 		return <div class="messageSender">
+ 		return <div className="messageSender">
  				<label>Recipient:</label><label>{this.props.recipient}</label><br/>
- 				<label>Subject:</label><input type="text" valueLink={this.state.subject}/><br/>
- 				<textarea valueLink={this.state.content} /><br/>
+ 				<label>Subject:</label><input type="text" valueLink={this.linkState('subject')} /><br/>
+ 				<textarea valueLink={this.linkState('content')} /><br/>
  				<input type="button" value="send" onMouseUp={this.sendMessage}/><label>{this.state.info}</label>
  			</div>;
  	}
@@ -98,9 +119,12 @@ var messageEntry = React.createClass({
 
  messageModel = Backbone.Model.extend({
  	defaults : {
- 		recipient : null,
- 		subject : null,
- 		content : null
+   			subject : "",
+    			recipient : "",
+    			sender : "",
+    			content : "",
+    			sent : "",
+    			previous : ""
  	},
  	url : "/messages/private"
  });

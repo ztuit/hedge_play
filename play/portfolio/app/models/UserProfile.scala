@@ -28,17 +28,16 @@ case class UserProfileException(id : Int, smth:String)  extends Exception
 object UserProfile  {
 
 	def save( u : UserProfile) : Try[String] = {
-		val riakFut = RiakClientWrapper.store("UserProfile",u.username,Json.stringify(Json.toJson(u))) 
-		Await.result(riakFut, 500 millis)
-		riakFut value match {
-			case Some(Success(_)) => Success("Saved successfully")
-			case Some(Failure(e)) => Failure(e)
-			case None => Failure(UserProfileException(3,"User save failed"))
+		val riakFut = RiakClientWrapper.store("UserProfile",u,u) 
+		
+		riakFut  match {
+			case Success(_) => Success("Saved successfully")
+			case Failure(e) => Failure(UserProfileException(3,"User Profile save failed"))
 		}
 	}
 
 	def get(key : String) : Option[String] = {
-		RiakClientWrapper.fetchValue("UserProfile", key) match {
+		RiakClientWrapper.fetchValue("UserProfile", new RiakKey(key)) match {
 			case Some(ro : IRiakObject) => Some(ro.getValueAsString)
 			case _ => Some(Json.stringify(Json.toJson(UserProfile(username = key))))
 		}
@@ -46,13 +45,12 @@ object UserProfile  {
 
 	def newProfile(key : String) : Try[String] = {
 			val profile = UserProfile(username = key, created = (new java.text.SimpleDateFormat("dd:MM:Y HH:mm a")).format(Calendar.getInstance.getTime))
-			var fut = RiakClientWrapper.store("UserProfile",profile.username, Json.stringify(Json.toJson(profile)))
+			var fut = RiakClientWrapper.store("UserProfile",profile, profile)
 
-			Await.result(fut, 500 millis)
-			fut value match {
-			case Some(Success(_)) => Success("Saved successfully")
-			case Some(Failure(e)) => Failure(e)
-			case None => Failure(UserProfileException(3,"User Profile save failed"))
+			
+			fut  match {
+			case Success(_) => Success("Saved successfully")
+			case Failure(e) => Failure(UserProfileException(3,"User Profile create failed"))
 		}
 	}
 
@@ -102,5 +100,12 @@ object UserProfile  {
   		(JsPath \ "img").write[String]
 	)(unlift(UserProfile.unapply))
 
+	implicit def toKey( u : UserProfile) : RiakKey = {
+		new RiakKey(u.username)
+	}
+
+	implicit def asJsonString( u : UserProfile) : RiakContent = {
+		new RiakContent(Json.toJson(u))
+	}
 
 }

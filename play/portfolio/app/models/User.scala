@@ -43,7 +43,7 @@ object User  {
 
 	def checkCredentials(u : User ) : Try[User] = {
 
-		RiakClientWrapper.fetchValue("User", u.userName) match {
+		RiakClientWrapper.fetchValue("User", u) match {
 			case Some(ruser : IRiakObject) =>  User.fromJson(Json.parse(ruser.getValueAsString)) match {
 				case Some(user) =>  if(Crypto.encryptAES(u.password)==user.password) Success(u) else Failure(UserException(0,"Bad credentials"))
 				case None => Failure(UserException(0,"Bad Credentials"))
@@ -57,7 +57,7 @@ object User  {
 	 * valid. Will return a string in the event of a problem, otherwise none
 	 **/ 
 	def validateNewUser(u : User) : Try[User] = {
-		if(RiakClientWrapper.fetchValue("User", u.userName).isDefined==true) {
+		if(RiakClientWrapper.fetchValue("User", u).isDefined==true) {
 			Failure(UserException(2,"user name already exists"))
 		} else {
 			Success(u)
@@ -82,12 +82,11 @@ object User  {
 	 **/
 	def newUser( u : User ) : Try[String] = {
 		var newUser = u.copy(password = Crypto.encryptAES(u.password))
-		val riakFut = RiakClientWrapper.store("User",u.userName,Json.stringify(Json.toJson(newUser))) 
-		Await.result(riakFut, 500 millis)
-		riakFut value match {
-			case Some(Success(_)) => Success("Saved successfully")
-			case Some(Failure(e)) => Failure(e)
-			case None => Failure(UserException(3,"User save failed"))
+		val riakFut = RiakClientWrapper.store("User",u,u) 
+		
+		riakFut  match {
+			case Success(_) => Success("Saved successfully")
+			case e@Failure(_) => e
 		}
 		UserProfile.newProfile(u.userName);
 	}
@@ -136,6 +135,13 @@ object User  {
   		(JsPath \ "email").write[String] and
   		(JsPath \ "password").write[String] 
 	)(unlift(User.unapply))
+	
+	implicit def toKey( u : User) : RiakKey = {
+		new RiakKey(u.userName)
+	}
 
+	implicit def asJsonString( u : User) : RiakContent = {
+		new RiakContent(Json.toJson(u))
+	}
 
 }
