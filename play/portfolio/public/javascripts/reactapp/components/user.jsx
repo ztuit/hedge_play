@@ -161,8 +161,9 @@ UserProfileModel = Backbone.Model.extend({
 
  var userProfileView = React.createClass({
 	requestMessageEntry : function() {
+
 		React.renderComponent(
-  			<messageSender recipient={this.props.profile.username} previous=""/>,
+  			<messageSender recipient={this.props.profile.username} previous="" url="/messages/private"/>,
   			document.getElementById("content")
 		);
 	},
@@ -175,7 +176,8 @@ UserProfileModel = Backbone.Model.extend({
     				<label>Name: </label><label>{this.props.profile.fullname}</label><br/>
     				<label>Role: </label><label>{this.props.profile.role}</label><br/>
     				<label>Pic:</label><img src={this.props.profile.img} alt="pic"/><br/>
-    				<label>Description: </label><textarea readOnly rows="4" cols="50" value={this.props.profile.description}/><br/>
+    				
+    				<label>Profile: </label><input type="button" value="View blog" onMouseUp={this.viewBlog}/><br/><br/><textarea readOnly rows="4" cols="50" value={this.props.profile.description}/><br/>
     			</div></div>);
 	  }
  });

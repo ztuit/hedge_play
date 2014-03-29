@@ -13,6 +13,7 @@ import scala.concurrent.duration._
 import com.basho.riak.client.RiakLink
 import com.basho.riak.client.bucket.Bucket
 import com.basho.riak.client.query.WalkResult;
+import com.basho.riak.client.query.indexes.BinIndex
 
 class RiakException extends Exception
 
@@ -28,8 +29,23 @@ object RiakClientWrapper {
 	
 	private var client = RiakFactory.httpClient("http://localhost:8098/riak")
 
-	def store(bucket : String, key : RiakKey, data : RiakContent) : Try[IRiakObject] = {
-		val storeObj = client.fetchBucket(bucket).execute.store(key.id, data.content).returnBody(true)
+
+
+
+
+
+	def storeWithIndex(bucketObj : Bucket,key : RiakKey, data : RiakContent, indexName : String, indexValue : String) : Try[IRiakObject] = {
+
+		storeWithIndex(bucketObj,store(bucketObj, key, data).get,indexName,indexValue)
+	}	
+
+	def storeWithIndex(bucketObj : Bucket, toStore : IRiakObject,indexName : String, indexValue : String) : Try[IRiakObject] = {
+		Success(bucketObj.store(toStore.addIndex(indexName, indexValue)).returnBody(true).execute)
+	}
+
+
+	def store(bucket : Bucket, key : RiakKey, data : RiakContent) : Try[IRiakObject] = {
+		val storeObj = bucket.store(key.id, data.content).returnBody(true)
 		
 		var f = future { 
 			storeObj.execute
@@ -42,31 +58,39 @@ object RiakClientWrapper {
 			}
 	}
 
+	def fetchForIndex(bucket : Bucket, indexName : String, indexValue : String) : Try[List[IRiakObject]] = {
+		Success((bucket.fetchIndex(BinIndex.named(indexName)).withValue(indexValue).execute toList) map {
+			(x) => fetchValue(bucket, new RiakKey(x)) match {
+				case Some( r : IRiakObject) => r
+				case _ => null
+			}
+		})
+	}
 
-	def fetchAllForBucket(bucket : String ) : Future[List[IRiakObject]] = {
-		val strArray  = (client.fetchBucket(bucket).execute.keys.getAll map {_.toString}).toArray
+	def fetchAllForBucket(bucket : Bucket ) : Future[List[IRiakObject]] = {
+		val strArray  = (bucket.keys.getAll map {_.toString}).toArray
 		future {
-			client.fetchBucket(bucket).execute.multiFetch(strArray).execute map { _.get} toList
+			bucket.multiFetch(strArray).execute map { _.get} toList
 		}
 	}
 
-	def fetchValue(bucket : String, key : RiakKey) : Option[IRiakObject] = {
-		client.fetchBucket(bucket).execute.fetch(key.id).execute match {
+	def fetchValue(bucket : Bucket, key : RiakKey) : Option[IRiakObject] = {
+		bucket.fetch(key.id).execute match {
 			case v : IRiakObject => Some(v)
 			case _ => None
 		}
 	}
 
-	def store(bucket : String, r : IRiakObject) : Try[String] = {
-		client.fetchBucket(bucket).execute.store(r).returnBody(true).execute match {
-			case a : IRiakObject =>   Success("stored")
+	def store(bucket : Bucket, r : IRiakObject) : Try[IRiakObject] = {
+		bucket.store(r).returnBody(true).execute match {
+			case a : IRiakObject =>   Success(a)
 			case e@_ =>  Failure(new RiakException)
 		}
 	}
 
-	def addLinkStep(srcBucket : String, srcKey : String, targetBucket : String, targetKey : String, linkName : String) : Try[IRiakObject] = {
-		val bucket = client.fetchBucket(srcBucket).execute
-		bucket.store(bucket.fetch(srcKey).execute.addLink(new RiakLink(targetBucket,targetKey, linkName))).returnBody(true).execute match {
+	def addLinkStep(srcBucket : Bucket, srcKey : String, targetBucket : String, targetKey : String, linkName : String) : Try[IRiakObject] = {
+		
+		srcBucket.store(srcBucket.fetch(srcKey).execute.addLink(new RiakLink(targetBucket,targetKey, linkName))).returnBody(true).execute match {
 			case r : IRiakObject => Success(r)
 			case _ => Failure(new RiakException)
 		}
@@ -86,5 +110,16 @@ object RiakClientWrapper {
 		}
 	}
 
+	//implicits
+	implicit def fetchBucket(bucket : String ) : Bucket = {
+		client.fetchBucket(bucket).execute
+	}
+
+	implicit def mapTry(t : Try[IRiakObject]) : Try[String] = {
+		t match {
+			case Success( r : IRiakObject) => Success("Success")
+			case _ => Failure(new RiakException)
+		}
+	}
 
 }

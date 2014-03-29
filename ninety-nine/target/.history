@@ -70,3 +70,4 @@ clean
 sbteclipse
 eclipse
 ~run
+exit

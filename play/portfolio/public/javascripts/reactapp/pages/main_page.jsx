@@ -6,7 +6,9 @@ var MainRouter = Backbone.Router.extend({
 		"profile" : "profile",
 		"users" : "users",
 		"portfolio" : "portfolio",
-		"privatemessages" : "privatemessages"
+		"privatemessages" : "privatemessages",
+		"forum" : "forum",
+		"myblog" : "myblog"
 	},
 	profile : function() {
 		React.renderComponent(
@@ -27,8 +29,26 @@ var MainRouter = Backbone.Router.extend({
 			);	
 	},
 	privatemessages : function() {
+		document.getElementById("content").innerHTML=""
 		React.renderComponent(
-			<messageViewer url="/messages/private"/>,
+			<messageViewer url="/messages/private" allowSend="none" />,
+			document.getElementById("content")
+			);
+	},
+	forum : function() {
+		
+		document.getElementById("content").innerHTML=""
+
+		React.renderComponent(
+			<messageViewer url="/messages/public" allowSend="true" />,
+			document.getElementById("content")
+			);
+	},
+	myblog : function() {
+		document.getElementById("content").innerHTML=""
+
+		React.renderComponent(
+			<blogEntries url="/blog" />,
 			document.getElementById("content")
 			);
 	}

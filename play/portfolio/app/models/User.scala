@@ -15,6 +15,7 @@ import scala.util.Try
 import com.typesafe.plugin._
 import play.api.Play.current
 import play.api.libs.Crypto
+import RiakClientWrapper.fetchBucket
 
 case class User(userName : String, email : String, password : String) 
 
@@ -82,7 +83,7 @@ object User  {
 	 **/
 	def newUser( u : User ) : Try[String] = {
 		var newUser = u.copy(password = Crypto.encryptAES(u.password))
-		val riakFut = RiakClientWrapper.store("User",u,u) 
+		val riakFut = RiakClientWrapper.store("User",newUser,newUser) 
 		
 		riakFut  match {
 			case Success(_) => Success("Saved successfully")

@@ -11,8 +11,9 @@ var messageViewer = React.createClass({
   	},
     componentWillMount: function() {
     	var self = this;
+
 	    $.ajax({
-	      url: this.props.url,
+	      url: self.props.url,
 	      dataType: 'json',
 	      success: function(data) {
 	        self.setState({threads: data});
@@ -24,14 +25,18 @@ var messageViewer = React.createClass({
 	    });
   	}, 	
 	render : function() {
+    var self = this;
+
 		var mThread = this.state.threads.map(function (thread) {
 			if(thread.length>0) {
-	      		return <messageThread entries={thread} />;
+	      		return <messageThread entries={thread} url={self.props.url}/>;
 	      	} {
 	      		return <div></div>;
 	      	}
 	    });
     	return <div className="messageViewer">
+            <div style={{display: this.props.allowSend}}><label>New message thread</label><br/>
+            <messageSender url={this.props.url} previous="" /><br/></div>
     				<label>Current Message Threads</label><br/><br/>
     				{mThread}
     			</div>
@@ -42,9 +47,9 @@ var messageThread = React.createClass({
 
 	reply : function () {
 		var sub = "re:" + this.props.entries[this.props.entries.length-1].subject
-		
+	
 		React.renderComponent(
-  			<messageSender recipient={this.props.entries[this.props.entries.length-1].sender} subject={sub} previous={this.props.entries[this.props.entries.length-1].key}/>,
+  			<messageSender url={this.props.url} recipient={this.props.entries[this.props.entries.length-1].sender} subject={sub} previous={this.props.entries[this.props.entries.length-1].key}/>,
   			document.getElementById("content")
 		);
 	},
@@ -98,6 +103,7 @@ var messageEntry = React.createClass({
   		message.set("recipient", this.props.recipient);
   		message.set("subject", this.state.subject);
     	message.set("content", this.state.content);
+      message.url = this.props.url;
   		var self = this;
   		message.save(null, {
 			success: function (model, response) {
@@ -108,7 +114,7 @@ var messageEntry = React.createClass({
     	} });
   	},
  	render : function() {
- 		return <div className="messageSender">
+ 		return <div className="messageSender" >
  				<label>Recipient:</label><label>{this.props.recipient}</label><br/>
  				<label>Subject:</label><input type="text" valueLink={this.linkState('subject')} /><br/>
  				<textarea valueLink={this.linkState('content')} /><br/>

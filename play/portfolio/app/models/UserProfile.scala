@@ -19,6 +19,8 @@ import play.api.libs.Crypto
 import java.util.Calendar
 import java.text.SimpleDateFormat
 
+import RiakClientWrapper.fetchBucket
+
 case class UserProfile(username : String = "", created: String = "", fullname : String = "", role : String = "", description : String = "new description", img : String = "") 
 
 

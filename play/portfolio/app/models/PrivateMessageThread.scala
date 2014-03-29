@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat
 import com.basho.riak.client.IRiakObject
 import scala.util.{Success, Failure}
 import com.basho.riak.client.RiakLink
+import RiakClientWrapper.fetchBucket
 
 case class PrivateMessageThread(key : String, sender : String, recipient : String, subject : String, content : String, sent : String, previous : String)
 
@@ -53,8 +54,9 @@ object PrivateMessageThread {
 	}
 
 	def allSubThreads( l : Try[List[PrivateMessageThread]])  : Try[List[List[PrivateMessageThread]]] = {
-
-		Success(l.get map {(x) => subThreads(x)})
+		
+		Success((l.get distinct) map {(x) => subThreads(x)})
+		
 	}
 
 	def subThreads( pm : PrivateMessageThread) : List[PrivateMessageThread] = {
@@ -68,7 +70,12 @@ object PrivateMessageThread {
 	/**
 	 * Implcitis for loading and saving, currently a little 
 	 * pointless as the client recieves as json, and the
-	 * db stores as json.
+		(JsPath \ "key").write[String] and
+  		(JsPath \ "sender").write[String] and
+  		(JsPath \ "subject").write[String] and
+  		(JsPath \ "content").write[String] and
+    	(JsPath \ "sent").write[String] and
+  		(JsPath \ "previous").write[String]	 * db stores as json.
 	 **/
 	implicit val privateMessageThreadReads: Reads[PrivateMessageThread] = (
 		(__ \ "key").read[String] and
@@ -79,6 +86,8 @@ object PrivateMessageThread {
   		(__ \ "sent").read[String] and
   		(__ \ "previous").read[String]
 	)(PrivateMessageThread.apply _)
+
+
 
 	implicit val privateMessageThreadWrites: Writes[PrivateMessageThread] = (
 		(JsPath \ "key").write[String] and

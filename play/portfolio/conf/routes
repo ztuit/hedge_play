@@ -22,3 +22,9 @@ PUT    	/user/profile/:key          controllers.UserProfileController.save(key :
 GET     /user/profiles				controllers.UserProfileController.all
 GET     /messages/private			controllers.PrivateMessageThreadController.all
 POST    /messages/private			controllers.PrivateMessageThreadController.create
+GET     /messages/public			controllers.PublicMessageThreadController.all
+POST    /messages/public			controllers.PublicMessageThreadController.create
+GET     /blog						controllers.BlogController.current
+GET     /blog/:key					controllers.BlogController.get(key : String)
+PUT	    /blog						controllers.BlogController.update
+POST   	/blog  				        controllers.BlogController.create

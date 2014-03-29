@@ -24,17 +24,17 @@ object Users extends Controller {
     		BadRequest("Expecting Json data");
   		} else {
 
-  		User.fromJson(json) match {
-  				case Some(user) => User.validateNewUser(user) match {
-  									case Success(user) => User.newUser(user) match { 
-  															case Success(s) => Ok(Json.toJson(s)).as("application/json");
-  															case Failure(e) => BadRequest("Failed to save new user");
-  															}
-  									case Failure(e : UserException) => BadRequest(Json.toJson(e.id));
-  									case _ => BadRequest(Json.toJson(0));
-  								}
-  				case None => BadRequest("Couldn't convert json to user");
-  			}
+	  		User.fromJson(json) match {
+	  				case Some(user) => User.validateNewUser(user) match {
+	  									case Success(user) => User.newUser(user) match { 
+	  																case Success(s) => Ok(Json.toJson(s)).as("application/json");
+	  																case Failure(e) => BadRequest("Failed to save new user");
+	  															}
+	  									case Failure(e : UserException) => BadRequest(Json.toJson(e.id));
+	  									case _ => BadRequest(Json.toJson(0));
+	  								}
+	  				case None => BadRequest("Couldn't convert json to user");
+	  			}
   			
   		}
 	}
