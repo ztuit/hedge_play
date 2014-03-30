@@ -8,17 +8,19 @@ var MainRouter = Backbone.Router.extend({
 		"portfolio" : "portfolio",
 		"privatemessages" : "privatemessages",
 		"forum" : "forum",
-		"myblog" : "myblog"
+		"myblog" : "myblog",
+		"viewBlog/:user" : "viewBlog",
+		"sendMessage/:user" : "sendMessage"
 	},
 	profile : function() {
 		React.renderComponent(
-			<userProfile id={userSS.state.name}/>,
+			<userProfile id={userSS.state.name} />,
 			document.getElementById("content")
 			);
 	},
 	users : function() {
 		React.renderComponent(
-			<userProfileList url="/user/profiles"/>,
+			<userProfileList url="/user/profiles" router={this}/>,
 			document.getElementById("content")
 			);		
 	},
@@ -48,7 +50,23 @@ var MainRouter = Backbone.Router.extend({
 		document.getElementById("content").innerHTML=""
 
 		React.renderComponent(
-			<blogEntries url="/blog" />,
+			<blogEntries url="/blog" readOnly="false"/>,
+			document.getElementById("content")
+			);
+	},
+	sendMessage : function(user) {
+		document.getElementById("content").innerHTML=""
+		React.renderComponent(
+  			<messageSender recipient={user} previous="" url="/messages/private"/>,
+  			document.getElementById("content")
+		);
+	},
+	viewBlog : function(user) {
+				
+		document.getElementById("content").innerHTML=""
+		var urlu = "/blog/" + user
+		React.renderComponent(
+			<blogEntries url={urlu} readOnly="true"/>,
 			document.getElementById("content")
 			);
 	}

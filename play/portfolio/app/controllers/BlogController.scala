@@ -20,7 +20,11 @@ object BlogController extends Controller {
 	}
 
 	def get(k : String) = Action {
-		Ok("")
+		request => 
+		Blog.allForUser(k) match {
+				case Some( l : List[Blog]) => Ok(Json.toJson(l)) 
+				case _ => Ok(Json.obj("result" ->   "none available"))
+			}
 	}
 
 	def update = Action(BodyParsers.parse.json) {

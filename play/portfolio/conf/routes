@@ -6,25 +6,27 @@
 GET     /                           controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
-GET		/users						controllers.Users.list
-GET		/users/:key               	controllers.Users.get(key : String)
-POST	/users						controllers.Users.create
-POST	/users/delete/:key			controllers.Users.delete(key : String)
-GET	    /login						controllers.Application.login
-POST	/login						controllers.Users.login
-GET    	/logout/:key				controllers.Users.logout(key : String)
-GET     /register				    controllers.Users.register
-GET 	/connected/:id				controllers.Application.connected(id : String)
-GET     /main						controllers.Application.mainpage
-GET     /user/profile/:key			controllers.UserProfileController.get(key : String)
-PUT    	/user/profile/:key          controllers.UserProfileController.save(key : String)
-GET     /user/profiles				controllers.UserProfileController.all
-GET     /messages/private			controllers.PrivateMessageThreadController.all
-POST    /messages/private			controllers.PrivateMessageThreadController.create
-GET     /messages/public			controllers.PublicMessageThreadController.all
-POST    /messages/public			controllers.PublicMessageThreadController.create
-GET     /blog						controllers.BlogController.current
-GET     /blog/:key					controllers.BlogController.get(key : String)
-PUT	    /blog						controllers.BlogController.update
-POST   	/blog  				        controllers.BlogController.create
+GET     /assets/*file               			controllers.Assets.at(path="/public", file)
+GET		/users									controllers.Users.list
+GET		/users/:key               				controllers.Users.get(key : String)
+POST	/users									controllers.Users.create
+POST	/users/delete/:key						controllers.Users.delete(key : String)
+GET	    /login									controllers.Application.login
+POST	/login									controllers.Users.login
+GET    	/logout/:key							controllers.Users.logout(key : String)
+GET     /register				    			controllers.Users.register
+GET 	/connected/:id							controllers.Application.connected(id : String)
+GET     /main									controllers.Application.mainpage
+GET     /user/profile/:key						controllers.UserProfileController.get(key : String)
+PUT    	/user/profile/:key          			controllers.UserProfileController.save(key : String)
+GET     /user/profiles							controllers.UserProfileController.all
+GET     /messages/private						controllers.PrivateMessageThreadController.all
+POST    /messages/private						controllers.PrivateMessageThreadController.create
+GET     /messages/public						controllers.PublicMessageThreadController.all
+POST    /messages/public						controllers.PublicMessageThreadController.create
+GET     /blog									controllers.BlogController.current
+GET     /blog/:key								controllers.BlogController.get(key : String)
+PUT	    /blog									controllers.BlogController.update
+POST   	/blog  				        			controllers.BlogController.create
+POST    /contextcomment							controllers.ContextualCommentsController.create
+GET     /contextcomment/:bucket/:key			controllers.ContextualCommentsController.get(bucket : String, key : String)

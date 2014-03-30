@@ -147,9 +147,9 @@ UserProfileModel = Backbone.Model.extend({
 	    });
   	}, 	
 	render: function() {
-
+		var self = this;
 	    var profileNodes = this.state.data.map(function (uspm) {
-	      return <userProfileView profile={uspm} />;
+	      return <userProfileView profile={uspm} router={self.props.router}/>;
 	    });
 	    return (
 	      <div className="profileList">
@@ -162,10 +162,10 @@ UserProfileModel = Backbone.Model.extend({
  var userProfileView = React.createClass({
 	requestMessageEntry : function() {
 
-		React.renderComponent(
-  			<messageSender recipient={this.props.profile.username} previous="" url="/messages/private"/>,
-  			document.getElementById("content")
-		);
+		this.props.router.navigate("sendMessage/" + this.props.profile.username, {trigger : true}) 
+	},
+	viewBlog : function() {
+			this.props.router.navigate("viewBlog/" + this.props.profile.username, {trigger : true}) 
 	},
  	render: function() {
  		return (<div><br/><br/>
