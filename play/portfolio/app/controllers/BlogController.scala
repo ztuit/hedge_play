@@ -27,9 +27,22 @@ object BlogController extends Controller {
 			}
 	}
 
-	def update = Action(BodyParsers.parse.json) {
-		request =>
-		Ok("")
+	def update(key : String) = Action(BodyParsers.parse.json) {
+		request => request.body.validate[Blog] match {
+
+			case s : JsSuccess[Blog] => Blog.update(s.get) match {
+					case Success( t : String) => Ok(Json.obj("result" ->   "success", "edited" -> t))
+					case _ => BadRequest(Json.obj("result" ->   "Unable to update blog"));
+				}
+			case _ => BadRequest(Json.obj("result" ->   "Unable to parse blog json"));
+		}
+	}
+
+	def delete(k : String) = Action {
+		request => Blog.delete(k) match {
+				case Success(_) => Ok(Json.obj("result" ->   "Successfully deleted")) 
+				case _ => Ok(Json.obj("result" ->   "Failed to delete"))
+			}
 	}
 
 	def create = Action(BodyParsers.parse.json) {

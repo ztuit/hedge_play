@@ -30,7 +30,6 @@ var blogEntries = React.createClass({
 		    });
 		    return (<div className="blogList">
 		    			<div>
-		    				<label>New Blog Entry</label>
 		    				<blogEditor entry={{key:"", content:"", created:"", edited:""}}/>
 		    				<br/><br/>
 		    			</div>
@@ -56,38 +55,74 @@ var blogEntries = React.createClass({
 
  var blogEditor = React.createClass({
  	 mixins: [React.addons.LinkedStateMixin],
+ 	 componentDidMount : function() {
+
+ 	 	 	 		 	 		tinyMCE.init({
+        			mode : "exact",
+        			elements : this.state.id,
+        			 theme : "modern"
+
+                       
+				});
+				
+ 	 },
  	 getInitialState: function() {
+
+ 	 	var sid = new Date().getTime().toString();
+ 	 	
+ 	 	//tinyMCE.get("blogEditorText").setContent(c);
     	return {content: this.props.entry.content, 
-    			info:""};
+    			info:"",
+    			id : sid,
+    			edited : this.props.entry.edited};
   	},
  	deleteEntry : function() {
-
+ 		var blog = new BlogModel();
+ 		
+ 		if(this.props.entry.key) {
+ 			
+			blog.set("key",this.props.entry.key)
+		}
+		blog.destroy();
  	},
  	save : function () {
+ 		
  		var self = this;
  		var blog = new BlogModel();
- 		if(this.state.key)
-			blog.set("key",this.state.key)
+ 		if(this.props.entry.key) {
+ 		
+			blog.set("key",this.props.entry.key)
+		}
 
-		blog.set("content", this.state.content)
+		blog.set("content", tinyMCE.get(this.state.id).getContent())
 		blog.set("created", this.props.entry.created)
-		blog.set("edited", this.props.entry.edited)	
+		blog.set("edited", this.state.edited)	
 		
 		blog.save(null, {
 			success: function (model, response) {
-        		self.setState({info:"blog entry saved"});
+
+        		self.setState({info:"blog entry saved", edited : model.get("edited")});
         	},
     		error: function (model, response) {
     			self.setState({info:"blog entry save failed"});
     	} });
  	},
+ 	subrender : function() {
+ 		if(this.props.entry.edited.length!=0)
+ 			return (<div><label>Edit Blog Entry</label><br/><label>Created:</label><label>{this.props.entry.created}</label><span>    </span><label>Last Edited:</label><label>{this.linkState('edited')}</label></div>);
+ 		else
+ 			return <div><label>Create New Blog Entry</label><br/></div>;
+ 	},
  	render: function() {
+
+ 		var newEntry = this.subrender();
+
  		return (
  				
- 				<div className="blogEditor">
-    				<label>Created: </label><label>{this.props.entry.created}</label><br/>
-    				<label>Last Edited: </label><label>{this.props.entry.edited}</label><br/>
-    				<textarea valueLink={this.linkState('content')} ></textarea><br/>    				
+ 				<div className="blogEditor" >
+ 					
+ 					{newEntry}
+    				<textarea id={this.state.id} valueLink={this.linkState('content')} ></textarea><br/>    				
     				<input type="button" value="Save/Update" onMouseUp={this.save}/><input type="button" value="Delete" onMouseUp={this.deleteEntry}/>
     				<label>{this.linkState('info')}</label>
     			</div>);
@@ -98,7 +133,9 @@ var blogEntries = React.createClass({
 var blogViewer = React.createClass({
  	 mixins: [React.addons.LinkedStateMixin],
  	 getInitialState: function() {
-    	return {content: this.props.entry.content, 
+ 	 	var c = unescape(this.props.entry.content)
+ 	 	
+    	return {content: c, 
     			info:""};
   	},
  	
@@ -108,7 +145,7 @@ var blogViewer = React.createClass({
  				<div className="blogEntry">
     				<label>Created: </label><label>{this.props.entry.created}</label><br/>
     				<label>Last Edited: </label><label>{this.props.entry.edited}</label><br/>
-    				<textarea valueLink={this.linkState('content')} ></textarea><br/><br/>
+    				<div dangerouslySetInnerHTML={{__html: this.state.content}} ></div><br/><br/>
     				<contextCommentViewer contextBucket="Blog" contextKey={this.props.entry.key} />    				
     			</div>);
 	  }
@@ -117,7 +154,6 @@ var blogViewer = React.createClass({
  BlogModel = Backbone.Model.extend({
  	idAttribute : "key",
 	defaults :{
-		
 		content : "",
 		created : "",
 		edited : ""

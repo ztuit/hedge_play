@@ -28,7 +28,19 @@ object Blog {
 		}
 	}
 
+	def update( b : Blog) : Try[String] = {
+		val currentTime = (new java.text.SimpleDateFormat("dd:MM:Y HH:mm a")).format(Calendar.getInstance.getTime);
+		val newB = Blog(b.key, created = b.created, edited = currentTime, content = b.content)
+		RiakClientWrapper.store("Blog",new RiakKey(newB.key),new RiakContent(Json.toJson(newB))) match {
+			case Success(_) => Success(newB.edited)
+			case _ => Failure(new RiakException)
+		}
+	}
 
+	def delete( s : String) : Try[String] = {
+		RiakClientWrapper.delete("Blog",new RiakKey(s));
+		Success("");
+	}
 
 	def allForUser(userKey : String) : Option[List[Blog]] = {
 		RiakClientWrapper.getLinkStep("User", userKey, "Blog") match {

@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat
 
 import RiakClientWrapper.fetchBucket
 
-case class UserProfile(username : String = "", created: String = "", fullname : String = "", role : String = "", description : String = "new description", img : String = "") 
+case class UserProfile(username : String = "", created: String = "", fullname : String = "", role : String = "user", description : String = "new description", img : String = "/assets/images/book_covers.png") 
 
 
 case class UserProfileException(id : Int, smth:String)  extends Exception

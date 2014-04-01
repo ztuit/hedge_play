@@ -26,7 +26,8 @@ GET     /messages/public						controllers.PublicMessageThreadController.all
 POST    /messages/public						controllers.PublicMessageThreadController.create
 GET     /blog									controllers.BlogController.current
 GET     /blog/:key								controllers.BlogController.get(key : String)
-PUT	    /blog									controllers.BlogController.update
+PUT	    /blog/:key								controllers.BlogController.update(key : String)
 POST   	/blog  				        			controllers.BlogController.create
+DELETE  /blog/:key  				        	controllers.BlogController.delete(key : String)
 POST    /contextcomment							controllers.ContextualCommentsController.create
 GET     /contextcomment/:bucket/:key			controllers.ContextualCommentsController.get(bucket : String, key : String)

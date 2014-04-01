@@ -110,6 +110,10 @@ object RiakClientWrapper {
 		}
 	}
 
+	def delete(b : Bucket, k : RiakKey) {
+		b.delete(k.id).execute
+	}
+
 	//implicits
 	implicit def fetchBucket(bucket : String ) : Bucket = {
 		client.fetchBucket(bucket).execute

@@ -58,17 +58,32 @@ LogoutModel = Backbone.Model.extend({
  */
 var userProfile = React.createClass({
 	mixins: [React.addons.LinkedStateMixin],
+	componentDidMount : function() {
+
+ 	 	 	 		 	 		tinyMCE.init({
+        			mode : "exact",
+        			elements : "profiledesc",
+        			 theme : "modern"
+
+                       
+				});
+
+ 	 	 	 		 	 		
+ 	},
 	getInitialState : function() {
 
 		var usnps = new UserProfileModel();
 		var self = this;
 		usnps.set("username",this.props.id)
-		usnps.fetch({ success : function(user){self.setState({username: user.get("username"), 
+		usnps.fetch({ success : function(user){
+			self.setState({username: user.get("username"), 
 																fullname : user.get("fullname"), 
 																description : user.get("description"),
 																img : user.get("img"),
 																created : user.get("created"),
-																role : user.get("role")});}});
+																role : user.get("role")});
+			
+		}});
 		return {
 			username : null,
 			role: null,
@@ -85,8 +100,8 @@ var userProfile = React.createClass({
 		usnps.set("username", this.state.username)
 		usnps.set("role", this.state.role)
 		usnps.set("fullname", this.state.fullname)
-		usnps.set("description", this.state.description)
-		usnps.set("created", this.state.createDate)
+		usnps.set("description", tinyMCE.get("profiledesc").getContent())
+		usnps.set("created", this.state.created)
 		usnps.set("img", this.state.img)
 
 		var self = this;			
@@ -105,8 +120,8 @@ var userProfile = React.createClass({
     				<label>Username: </label><label>{this.linkState('username')}</label><br/>
     				<label>Role: </label><label>{this.linkState('role')}</label><br/>
     				<label>Name: </label><input type="text" valueLink={this.linkState('fullname')}/><br/>
-    				<label>Pic:</label><img src="" alt="pic"/><br/>
-    				<label>Description: </label><textarea rows="4" cols="50" valueLink={this.linkState('description')}/><br/>
+    				<label>Pic:</label><img src={this.state.img} alt="pic"/><br/>
+    				<label>About: </label><br/><textarea id="profiledesc" valueLink={this.linkState('description')}/><br/>
     				<input type="button" value="Update" onMouseUp={this.update}/><label>{this.linkState('updatemessage')}</label><br/><br/>
     			</div>;
   	}
@@ -160,6 +175,7 @@ UserProfileModel = Backbone.Model.extend({
  });
 
  var userProfileView = React.createClass({
+
 	requestMessageEntry : function() {
 
 		this.props.router.navigate("sendMessage/" + this.props.profile.username, {trigger : true}) 
@@ -168,6 +184,7 @@ UserProfileModel = Backbone.Model.extend({
 			this.props.router.navigate("viewBlog/" + this.props.profile.username, {trigger : true}) 
 	},
  	render: function() {
+
  		return (<div><br/><br/>
  				
  				<div className="userProfileView">
@@ -177,7 +194,7 @@ UserProfileModel = Backbone.Model.extend({
     				<label>Role: </label><label>{this.props.profile.role}</label><br/>
     				<label>Pic:</label><img src={this.props.profile.img} alt="pic"/><br/>
     				
-    				<label>Profile: </label><input type="button" value="View blog" onMouseUp={this.viewBlog}/><br/><br/><textarea readOnly rows="4" cols="50" value={this.props.profile.description}/><br/>
+    				<label>About: </label><br/><div dangerouslySetInnerHTML={{__html: this.props.profile.description}}/><br/><input type="button" value="View blog" onMouseUp={this.viewBlog}/>
     			</div></div>);
 	  }
  });
