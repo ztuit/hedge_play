@@ -39,9 +39,10 @@ var blogEntries = React.createClass({
 				    </div>
 		    );
 		} else {
-			 var blogNodes = this.state.data.map(function (blogEnt) {
+			var self = this;
+			var blogNodes = this.state.data.map(function (blogEnt) {
 		    	
-		      return <blogViewer entry={blogEnt} />;
+		      return <blogViewer entry={blogEnt} blogger={self.props.blogger}/>;
 		    });
 			return (<div className="blogList">
 				   		<div>
@@ -140,9 +141,11 @@ var blogViewer = React.createClass({
   	},
  	
  	render: function() {
+ 		var bloggerthumburl="/user/photothumb/" + this.props.blogger
  		return (
  				
  				<div className="blogEntry">
+ 					<label>Blogger:</label><label>{this.props.blogger}</label><img src={bloggerthumburl}/><br/>
     				<label>Created: </label><label>{this.props.entry.created}</label><br/>
     				<label>Last Edited: </label><label>{this.props.entry.edited}</label><br/>
     				<div dangerouslySetInnerHTML={{__html: this.state.content}} ></div><br/><br/>

@@ -9,8 +9,12 @@ import scala.util.Success
 import scala.util.Failure
 import java.util.Calendar
 import java.text.SimpleDateFormat
+import java.io.File
+import java.io.FileOutputStream
+import javax.imageio.ImageIO
+import org.imgscalr.Scalr
 
-
+import play.api.libs.Files
 
 object UserProfileController extends Controller {
 
@@ -34,6 +38,48 @@ object UserProfileController extends Controller {
 
 	def all = Action {
 		Ok(Json.toJson(UserProfile.all())).as("application/json");
+	}
+
+	def uploadProfilePhoto = Action(parse.multipartFormData) { request =>
+		var tmpFile = File.createTempFile("profile","playpic");
+  		request.body.file("userfile").map { picture => picture.ref.moveTo(tmpFile, true)}
+
+  		UserProfile.updateUserPhoto(tmpFile, (Json.parse(request.session.get("connectedAs").get) \ "user").as[String]) match {
+  			case Success(_) => tmpFile.delete(); Ok("File uploaded")
+  			case _ => BadRequest(Json.stringify(Json.obj("reason" ->   "Unable to update user")));
+  		}
+	}
+
+	def profileImage = Action {
+		request =>
+		UserProfile.profileImage((Json.parse(request.session.get("connectedAs").get) \ "user").as[String]) match {
+			case Success(s : Array[Byte]) =>  Ok(s).as("image/png")
+			case _ => BadRequest(Json.stringify(Json.obj("reason" ->   "Unable to load user image")));
+		}
+	}
+
+	def profileThumbImage = Action {
+		request =>
+		UserProfile.profileThumbImage((Json.parse(request.session.get("connectedAs").get) \ "user").as[String]) match {
+			case Success(s : Array[Byte]) =>  Ok(s).as("image/png")
+			case _ => BadRequest(Json.stringify(Json.obj("reason" ->   "Unable to load user image")));
+		}
+	}
+
+	def profileImageKey(key : String) = Action {
+		request =>
+		UserProfile.profileImage(key) match {
+			case Success(s : Array[Byte]) =>  Ok(s).as("image/png")
+			case _ => BadRequest(Json.stringify(Json.obj("reason" ->   "Unable to load user image")));
+		}
+	}
+
+	def profileThumbImageKey(key : String) = Action {
+		request =>
+		UserProfile.profileThumbImage(key) match {
+			case Success(s : Array[Byte]) =>  Ok(s).as("image/png")
+			case _ => BadRequest(Json.stringify(Json.obj("reason" ->   "Unable to load user image")));
+		}
 	}
 
 }

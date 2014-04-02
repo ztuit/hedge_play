@@ -10,7 +10,8 @@ libraryDependencies ++= Seq(
   cache,
   "com.scalapenos" %% "riak-scala-client" % "0.9.0",
   "com.basho.riak" % "riak-client" % "1.4.4",
-  "com.typesafe" %% "play-plugins-mailer" % "2.1-RC2"
+  "com.typesafe" %% "play-plugins-mailer" % "2.1-RC2",
+  "org.imgscalr" % "imgscalr-lib" % "4.2"
 )     
 
 play.Project.playScalaSettings

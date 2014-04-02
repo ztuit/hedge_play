@@ -79,11 +79,12 @@ var contextCommentEditor = React.createClass({
 
  var contextComment = React.createClass({
  	render: function() {
+ 		var commenterThumbUrl = "/user/photothumb/" + this.props.entry.author
  		return (
  				
  				<div className="contextComment">
     				<label>Created: </label><label>{this.props.entry.created}</label><br/>
-    				<label>By: </label><label>{this.props.entry.author}</label><br/>
+    				<label>By: </label><label>{this.props.entry.author}</label><img src={commenterThumbUrl} alt="*"/><br/>
     				<div>{this.props.entry.content}</div><br/>    				  			
     			</div>);
 	  }

@@ -15,13 +15,15 @@ import scala.util.Try
 import com.typesafe.plugin._
 import play.api.Play.current
 import play.api.libs.Crypto
-
+import javax.imageio.ImageIO
+import org.imgscalr.Scalr
+import java.io.File
 import java.util.Calendar
 import java.text.SimpleDateFormat
 
 import RiakClientWrapper.fetchBucket
 
-case class UserProfile(username : String = "", created: String = "", fullname : String = "", role : String = "user", description : String = "new description", img : String = "/assets/images/book_covers.png") 
+case class UserProfile(username : String = "", created: String = "", fullname : String = "", role : String = "user", description : String = "new description", img : String = "/assets/images/guest.jpeg") 
 
 
 case class UserProfileException(id : Int, smth:String)  extends Exception
@@ -44,6 +46,8 @@ object UserProfile  {
 			case _ => Some(Json.stringify(Json.toJson(UserProfile(username = key))))
 		}
 	}
+
+
 
 	def newProfile(key : String) : Try[String] = {
 			val profile = UserProfile(username = key, created = (new java.text.SimpleDateFormat("dd:MM:Y HH:mm a")).format(Calendar.getInstance.getTime))
@@ -78,6 +82,40 @@ object UserProfile  {
       					}
       			)
 	}
+
+	def updateUserPhoto(f : File, key : String) : Try[String] = {
+  		 //get photo into BufferedImage
+ 		var orImg = ImageIO.read(f)
+ 		ImageIO.write(Scalr.resize(orImg, 150,150), "png", f)
+
+		get(key) match {
+			case Some( s : String) => Json.parse(s).validate[UserProfile] match {
+				case jv : JsSuccess[UserProfile] =>   RiakClientWrapper.storeImg("ProfileImage", new RiakKey(key), scala.io.Source.fromFile(f,"iso-8859-1").map(_.toByte).toArray) match {
+						case Success(_) => 	ImageIO.write(Scalr.resize(orImg, 20,20), "png", f);  RiakClientWrapper.storeImg("ProfileThumbImage", new RiakKey(key), scala.io.Source.fromFile(f,"iso-8859-1").map(_.toByte).toArray)
+						case _ => Failure(UserProfileException(0,"Error saving user image"))
+					}
+				case  _ => Failure(UserProfileException(0,"Error saving user image"))
+			}
+			case _ => Failure(UserProfileException(0,""))
+		}
+	}
+
+	def profileImage(key : String) : Try[Array[Byte]] = {
+
+		RiakClientWrapper.fetchValue("ProfileImage", new RiakKey(key)) match {
+			case Some(ro : IRiakObject) => Success(ro.getValue)
+			case _ => Failure(UserProfileException(0,"")) 
+		}
+	}
+
+	def profileThumbImage(key : String) : Try[Array[Byte]] = {
+
+		RiakClientWrapper.fetchValue("ProfileThumbImage", new RiakKey(key)) match {
+			case Some(ro : IRiakObject) => Success(ro.getValue)
+			case _ => Failure(UserProfileException(0,"")) 
+		}
+	}
+
 
 	/**
 	 * Implcitis for loading and saving, currently a little 

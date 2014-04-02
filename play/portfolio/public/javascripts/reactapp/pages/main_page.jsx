@@ -66,7 +66,7 @@ var MainRouter = Backbone.Router.extend({
 		document.getElementById("content").innerHTML=""
 		var urlu = "/blog/" + user
 		React.renderComponent(
-			<blogEntries url={urlu} readOnly="true"/>,
+			<blogEntries url={urlu} blogger={user} readOnly="true"/>,
 			document.getElementById("content")
 			);
 	}

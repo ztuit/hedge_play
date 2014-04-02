@@ -30,7 +30,7 @@ var userSnapshot = React.createClass({
 	},
   	render : function() {
     	return <div className="userSnapshot">
-    			<label>Logged in as: </label><label>{this.linkState('name')}</label><label> Since: </label><label>{this.linkState('time')} </label><a href="#" onClick={this.logout}>logout</a>
+    			<label>Logged in as: </label><label>{this.linkState('name')}</label><img src="/user/photothumb" alt="*"/><label> Since: </label><label>{this.linkState('time')} </label><a href="#" onClick={this.logout}>logout</a>
     		</div>;
   	}
 });
@@ -70,6 +70,21 @@ var userProfile = React.createClass({
 
  	 	 	 		 	 		
  	},
+ 	componentWillMount: function() {
+    	var self = this;
+
+	    $.ajax({
+	      url: "/user/photo",
+	      dataType: 'image/png',
+	      success: function(data) {
+	        alert(data)
+	        
+	      }.bind(this),
+	      error: function(xhr, status, err) {
+	        console.error(this.props.url, status, err.toString());
+	      }.bind(this)
+	    });
+  	}, 	
 	getInitialState : function() {
 
 		var usnps = new UserProfileModel();
@@ -82,7 +97,7 @@ var userProfile = React.createClass({
 																img : user.get("img"),
 																created : user.get("created"),
 																role : user.get("role")});
-			
+
 		}});
 		return {
 			username : null,
@@ -114,13 +129,21 @@ var userProfile = React.createClass({
     			self.setState({"updatemessage":"update failed"});
     	} });
 	},
+	uploadFile : function() {
+		var formData = new FormData();
+		formData.append("userfile", document.getElementById("fileUplad").files[0])
+		var request = new XMLHttpRequest();
+		request.open("POST", "/user/photo");
+		request.send(formData);
+	},
   	render : function() {
     	return <div className="userProfile">
     				<label>Created: </label><label>{this.linkState('created')}</label><br/>
     				<label>Username: </label><label>{this.linkState('username')}</label><br/>
     				<label>Role: </label><label>{this.linkState('role')}</label><br/>
     				<label>Name: </label><input type="text" valueLink={this.linkState('fullname')}/><br/>
-    				<label>Pic:</label><img src={this.state.img} alt="pic"/><br/>
+    				<label>Pic:</label><img src="/user/photo" alt="pic"/><br/>
+    				<input type="file" id="fileUplad" name="change picture"/><input type="button" value="Upload Picture" onMouseUp={this.uploadFile}/><br/>
     				<label>About: </label><br/><textarea id="profiledesc" valueLink={this.linkState('description')}/><br/>
     				<input type="button" value="Update" onMouseUp={this.update}/><label>{this.linkState('updatemessage')}</label><br/><br/>
     			</div>;
@@ -184,7 +207,7 @@ UserProfileModel = Backbone.Model.extend({
 			this.props.router.navigate("viewBlog/" + this.props.profile.username, {trigger : true}) 
 	},
  	render: function() {
-
+ 		var imgsrc = "/user/photo/" + this.props.profile.username
  		return (<div><br/><br/>
  				
  				<div className="userProfileView">
@@ -192,7 +215,7 @@ UserProfileModel = Backbone.Model.extend({
     				<label>Username: </label><label>{this.props.profile.username}</label><span/><input type="button" value="Send Message" onMouseUp={this.requestMessageEntry}/><br/>
     				<label>Name: </label><label>{this.props.profile.fullname}</label><br/>
     				<label>Role: </label><label>{this.props.profile.role}</label><br/>
-    				<label>Pic:</label><img src={this.props.profile.img} alt="pic"/><br/>
+    				<label>Pic:</label><img src={imgsrc} alt="*"/><br/>
     				
     				<label>About: </label><br/><div dangerouslySetInnerHTML={{__html: this.props.profile.description}}/><br/><input type="button" value="View blog" onMouseUp={this.viewBlog}/>
     			</div></div>);

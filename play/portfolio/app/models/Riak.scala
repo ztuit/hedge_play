@@ -89,7 +89,7 @@ object RiakClientWrapper {
 	}
 
 	def addLinkStep(srcBucket : Bucket, srcKey : String, targetBucket : String, targetKey : String, linkName : String) : Try[IRiakObject] = {
-		
+
 		srcBucket.store(srcBucket.fetch(srcKey).execute.addLink(new RiakLink(targetBucket,targetKey, linkName))).returnBody(true).execute match {
 			case r : IRiakObject => Success(r)
 			case _ => Failure(new RiakException)
@@ -112,6 +112,20 @@ object RiakClientWrapper {
 
 	def delete(b : Bucket, k : RiakKey) {
 		b.delete(k.id).execute
+	}
+
+	def storeImg(bucket : Bucket, key : RiakKey, data : Array[Byte]) : Try[String] = {
+		val storeObj = bucket.store(key.id, data).returnBody(false)
+		
+		var f = future { 
+			storeObj.execute
+		}
+		Await.result(f,1000 millis)
+
+		f value match {
+				case Some(Success(_)) =>  Success("")
+				case e@_ =>    Failure(new RiakException)
+			}
 	}
 
 	//implicits

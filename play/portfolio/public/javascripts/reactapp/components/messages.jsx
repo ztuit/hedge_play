@@ -70,10 +70,13 @@ var messageThread = React.createClass({
 var messageEntry = React.createClass({
 
 	render : function() {
+
+      var receiveurl = "/user/photothumb/" + this.props.entry.recipient;
+      var senderurl = "/user/photothumb/" + this.props.entry.sender;
     	return 	<div className="messageEntry">
-    	 			<label>To:</label><label>{this.props.entry.recipient}</label><br/>
-    				<label>From: {this.props.entry.sender}</label><br/>
-    				<label>From: {this.props.entry.sent}</label><br/>
+    	 			<label>To:</label><label>{this.props.entry.recipient}</label><img src={receiveurl} alt="*"/><br/>
+    				<label>From: {this.props.entry.sender}</label><img src={senderurl} alt="*"/><br/>
+    				<label>On: {this.props.entry.sent}</label><br/>
     				<label>Subject:</label><label>{this.props.entry.subject} </label><br/>
     				<textarea value={this.props.entry.content} readOnly/><br/>
     			</div>;
