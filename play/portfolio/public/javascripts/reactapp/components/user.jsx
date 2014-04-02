@@ -30,8 +30,7 @@ var userSnapshot = React.createClass({
 	},
   	render : function() {
     	return <div className="userSnapshot">
-    			<label>Logged in as: </label><label>{this.linkState('name')}</label><img src="/user/photothumb" alt="*"/><label> Since: </label><label>{this.linkState('time')} </label><a href="#" onClick={this.logout}>logout</a>
-    		</div>;
+    			<label>{this.linkState('name')}</label><img src="/user/photothumb" alt="*"/><label> Since: </label><label>{this.linkState('time')} </label><a href="#" onClick={this.logout}>logout</a></div>;
   	}
 });
 
@@ -135,6 +134,7 @@ var userProfile = React.createClass({
 		var request = new XMLHttpRequest();
 		request.open("POST", "/user/photo");
 		request.send(formData);
+		this.props.router.navigate("profile", {trigger : true}) 
 	},
   	render : function() {
     	return <div className="userProfile">

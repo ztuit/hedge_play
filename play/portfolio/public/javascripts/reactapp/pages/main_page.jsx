@@ -13,20 +13,23 @@ var MainRouter = Backbone.Router.extend({
 		"sendMessage/:user" : "sendMessage"
 	},
 	profile : function() {
+		document.getElementById("content").innerHTML=""
 		React.renderComponent(
-			<userProfile id={userSS.state.name} />,
+			<userProfile id={userSS.state.name} router={this} />,
 			document.getElementById("content")
 			);
 	},
 	users : function() {
+		document.getElementById("content").innerHTML=""
 		React.renderComponent(
 			<userProfileList url="/user/profiles" router={this}/>,
 			document.getElementById("content")
 			);		
 	},
 	portfolio : function() {
+		document.getElementById("content").innerHTML=""
 		React.renderComponent(
-			<portfolio/>,
+			<sandBox/>,
 			document.getElementById("content")
 			);	
 	},
@@ -77,9 +80,14 @@ Backbone.history.start();
 
 var userSS = new userSnapshot();
 
+//React.renderComponent(
+ // userSS,
+ // document.getElementById("user_details")
+//);
+
 React.renderComponent(
-  userSS,
-  document.getElementById("user_details")
+  <headerItems user={userSS}/>,
+  document.getElementById("header_items")
 );
 
 React.renderComponent(

@@ -18,13 +18,22 @@
         <script src="@routes.Assets.at("javascripts/reactapp/components/main_menu.jsx")" type="text/jsx"></script>
         <script src="@routes.Assets.at("javascripts/reactapp/components/messages.jsx")" type="text/jsx"></script>
         <script src="@routes.Assets.at("javascripts/reactapp/components/blog.jsx")" type="text/jsx"></script> 
-        <script src="@routes.Assets.at("javascripts/reactapp/components/contextcomment.jsx")" type="text/jsx"></script> 
+        <script src="@routes.Assets.at("javascripts/reactapp/components/sandbox.jsx")" type="text/jsx"></script> 
+        <script src="@routes.Assets.at("javascripts/reactapp/components/contextcomment.jsx")" type="text/jsx"></script>
+        <script src="@routes.Assets.at("javascripts/reactapp/components/header_items.jsx")" type="text/jsx"></script> 
         <script src="@routes.Assets.at("javascripts/reactapp/pages/main_page.jsx")" type="text/jsx"></script>
     </head>
     <body>
-        <div id="user_details"></div></br>
-        <div id="main_menu"></div><br/>
-        <div id="messageentry"></div>
-        <div id="content"></div>
+        <div id="pagecontainer">
+            <header id="pageheader">
+                <div id="header_items"></div><br/>
+            </header>
+            <nav id="main_menu"></nav></br>
+            <section id="pagesection"> 
+                <div id="messageentry"></div>
+                <div id="content"></div>
+            </section>
+            <footer id="pageFooter">Hedge Techology Solutions</footer>
+        </div>
     </body>
 </html>

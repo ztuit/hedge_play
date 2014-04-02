@@ -29,14 +29,14 @@ var mainMenu = React.createClass({
 	 },
   	render : function() {
     	return <nav className="mainMenu">
-    			<a href="#" onClick={this.profile}>my profile</a> | 
-    			<a href="#" onClick={this.mymessages}> my messages</a> |
-    			<a href="#" onClick={this.myblog}> my blog</a> |
-				<a href="#" onClick={this.users}> profiles</a> | 
-				<a href="#" onClick={this.portfolio}> portfolio apps</a> |
-				<a href="#" onClick={this.forum}> discussion</a>	|
-				<a href="#" onClick={this.about}> about</a>
-    			
+    			<ul>
+	    			<li><a href="#" onClick={this.profile}>my profile</a></li><li><a href="#" onClick={this.mymessages}> my messages</a></li>
+	    			<li><a href="#" onClick={this.myblog}> my blog</a></li>
+					<li><a href="#" onClick={this.users}> profiles</a></li>
+					<li><a href="#" onClick={this.portfolio}> sandbox apps</a></li>
+					<li><a href="#" onClick={this.forum}> discussion</a></li>
+					<li><a href="#" onClick={this.about}> about</a></li>
+    			</ul>
     		</nav>;
   	}
 });
