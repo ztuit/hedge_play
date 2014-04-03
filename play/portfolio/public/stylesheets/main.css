@@ -39,4 +39,31 @@ padding: 10px;
 .userSnapshot {
 	font-family: Zapfino, italic;
 	font-weight: italic;
+	display: inline-block;
+}
+
+#hedge_logo img {
+float: left;
+}
+
+#riak_logo  {
+float: right;
+}
+
+.sandBox header, section, footer, aside, nav, article, figure, figcaption {
+				display: block;}
+
+#aboutcontent {
+display:table;
+}
+
+#aboutarticle {
+	  width: 620px;
+        padding-right: 22px;
+	display:table-cell;
+}
+
+#aboutaside {
+	display:table-cell;
+	width: 300px;
 }

@@ -3,6 +3,7 @@ package controllers
 import play.api._
 import play.api.mvc._
 import models.User
+import models.UserProfile
 import models.UserException
 import play.api.libs.json._
 import scala.util.Success
@@ -55,7 +56,10 @@ object Users extends Controller {
 
 	  			User.fromJson(json) match {
 		  			case Some(user) => User.checkCredentials(user) match {
-		  				case Success(user) => Ok(Json.toJson("success")).withSession("connectedAs" -> Json.stringify(Json.obj("user" ->   user.userName, "time" -> (new java.text.SimpleDateFormat("E HH:mm a")).format(Calendar.getInstance.getTime)))).as("application/json");
+		  				case Success(user) => UserProfile.getProfile(user.userName) match {
+		  						case Some(up : UserProfile) => Ok(Json.toJson("success")).withSession("connectedAs" -> Json.stringify(Json.obj("user" ->   user.userName, "role" -> up.role,"time" -> (new java.text.SimpleDateFormat("E HH:mm a")).format(Calendar.getInstance.getTime)))).as("application/json");
+		  						case _ => BadRequest(Json.obj("result" ->   "Unable to determine user role"));
+		  					}
 		  				case Failure(e)	=> Unauthorized(Json.toJson(0));
 		  			}
 		  			case None => BadRequest(Json.toJson(4));

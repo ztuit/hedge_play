@@ -10,7 +10,15 @@ var MainRouter = Backbone.Router.extend({
 		"forum" : "forum",
 		"myblog" : "myblog",
 		"viewBlog/:user" : "viewBlog",
-		"sendMessage/:user" : "sendMessage"
+		"sendMessage/:user" : "sendMessage",
+		"about" : "about"
+	},
+	about : function () {
+				document.getElementById("content").innerHTML=""
+		React.renderComponent(
+			<aboutComponent />,
+			document.getElementById("content")
+			);
 	},
 	profile : function() {
 		document.getElementById("content").innerHTML=""
@@ -94,3 +102,10 @@ React.renderComponent(
   <mainMenu router={mainRouter} />,
   document.getElementById("main_menu")
 );
+
+React.renderComponent(
+  <footerItems/>,
+  document.getElementById("pageFooter")
+);
+
+mainRouter.navigate("about", {trigger : true})

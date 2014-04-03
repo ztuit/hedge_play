@@ -47,6 +47,12 @@ object UserProfile  {
 		}
 	}
 
+	def getProfile(key : String) : Option[UserProfile] = {
+		Json.parse(get(key).get).validate[UserProfile] match {
+			case s : JsSuccess[UserProfile] => Some(s.get)
+			case _ => None
+		} 
+	}
 
 
 	def newProfile(key : String) : Try[String] = {

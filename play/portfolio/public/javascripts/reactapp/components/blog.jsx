@@ -61,15 +61,7 @@ var blogEntries = React.createClass({
  	 	 	 		 	 		tinyMCE.init({
         			mode : "exact",
         			elements : this.state.id,
-        			theme : "modern",
-         			plugins: [
-        				"advlist autolink lists link image charmap print preview hr anchor pagebreak",
-        				"searchreplace wordcount visualblocks visualchars code fullscreen",
-        				"insertdatetime media nonbreaking save table contextmenu directionality",
-        				"emoticons template paste textcolor moxiemanager"
-    				],
-    				toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-    				toolbar2: "print preview media | forecolor backcolor emoticons"
+        			theme : "modern"
 
                        
 				});
@@ -92,7 +84,16 @@ var blogEntries = React.createClass({
  			
 			blog.set("key",this.props.entry.key)
 		}
-		blog.destroy();
+		var self = this;
+		blog.destroy(null, {
+			success: function (model, response) {
+
+        		self.setState({info:"blog entry saved", edited : model.get("edited")});
+        	},
+    		error: function (model, response) {
+    			var msg = "blog entry save failed, reason: " + response.responseText
+    			self.setState({info:msg});
+    	} });
  	},
  	save : function () {
  		
@@ -113,7 +114,8 @@ var blogEntries = React.createClass({
         		self.setState({info:"blog entry saved", edited : model.get("edited")});
         	},
     		error: function (model, response) {
-    			self.setState({info:"blog entry save failed"});
+    			var msg = "blog entry save failed, reason: " + response.responseText
+    			self.setState({info:msg});
     	} });
  	},
  	subrender : function() {

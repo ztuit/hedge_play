@@ -27,6 +27,9 @@ var mainMenu = React.createClass({
 	 myblog : function () {
 	 	this.props.router.navigate("myblog", {trigger : true})
 	 },
+	 about : function() {
+	 	this.props.router.navigate("about", {trigger : true})
+	 },
   	render : function() {
     	return <nav className="mainMenu">
     			<ul>

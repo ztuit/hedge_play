@@ -11,11 +11,12 @@ var userSnapshot = React.createClass({
 	getInitialState : function() {
 		var usnps = new UserSnapshotModel({id: 'abcd1234'});
 		var self = this;
-		usnps.fetch({ success : function(user){self.setState({name: user.get("user"), time : user.get("time")});}});
+		usnps.fetch({ success : function(user){self.setState({name: user.get("user"), time : user.get("time"), role : user.get("role")});}});
 		
 		return {
 			name : usnps.get("user"),
-			time : usnps.get("time")
+			time : usnps.get("time"),
+			role : usnps.get("role")
 		};
 	},
 	logout : function() {
@@ -38,7 +39,8 @@ UserSnapshotModel = Backbone.Model.extend({
 	defaults :{
 		id : null,
 		user : null,
-		time : null
+		time : null,
+		role : null
 	},
 	urlRoot : "/connected"
 });

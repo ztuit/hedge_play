@@ -113,7 +113,8 @@ var messageEntry = React.createClass({
         		self.setState({info:"message sent"});
         	},
     		error: function (model, response) {
-    			self.setState({info:"message send failed"});
+          var msg = "message send failed, reason: " + response.responseText;
+    			self.setState({info:msg});
     	} });
   	},
  	render : function() {
