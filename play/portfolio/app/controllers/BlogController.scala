@@ -40,7 +40,7 @@ object BlogController extends Controller {
 
 	def delete(k : String) = Action {
 		request => Blog.delete(k) match {
-				case Success(_) => Ok(Json.obj("result" ->   "Successfully deleted")) 
+				case Success(_) => NoContent
 				case _ => Ok(Json.obj("result" ->   "Failed to delete"))
 			}
 	}
@@ -49,7 +49,7 @@ object BlogController extends Controller {
 		request => request.body.validate[Blog] match {
 
 			case s : JsSuccess[Blog] => Blog.create(s.get, (Json.parse(request.session.get("connectedAs").get) \ "user").as[String]) match {
-					case Success(_) => Ok(Json.obj("result" ->   "success"))
+					case Success(_) => Created(Json.obj("result" ->   "success"))
 					case _ => BadRequest(Json.obj("result" ->   "Unable to save blog"));
 				}
 			case _ => BadRequest(Json.obj("result" ->   "Unable to parse blog json"));

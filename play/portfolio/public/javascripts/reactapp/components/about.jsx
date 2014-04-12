@@ -4,7 +4,7 @@
 
  var aboutComponent = React.createClass({
  	render : function () {
- 		return (<div class="sandBox">
+ 		return (<div className="aboutBox">
  				<header></header>
  				<nav>
  					<ul>
@@ -62,7 +62,7 @@
   							create profiles, blog entries, exchange 
   							messages and discuss in forums.
   							It is built using the Scala Play! Framework, 
-  							React.js & Backbone.js, and the Riak key/vaue DB.</p>
+  							React.js &amp; Backbone.js, and the Riak key/vaue DB.</p>
 					</aside>
 				</div>
 					<footer></footer>

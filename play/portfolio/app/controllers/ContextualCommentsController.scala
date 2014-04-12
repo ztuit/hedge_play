@@ -14,7 +14,7 @@ object ContextualCommentsController extends Controller {
 		request =>
 		request.body.validate[ContextualComments] match {
 			case s : JsSuccess[ContextualComments] =>  ContextualComments.create(s.get, (Json.parse(request.session.get("connectedAs").get) \ "user").as[String]) match {
-				case Success(_) => Ok(Json.obj("result" ->   "success"))
+				case Success(_) => Created(Json.obj("result" ->   "success"))
 				case Failure(_) => BadRequest(Json.stringify(Json.obj("result" ->   "Unable to save message")));
 			}
 			case _ => BadRequest(Json.stringify(Json.obj("result" ->   "Unable to parse message")));
@@ -25,7 +25,7 @@ object ContextualCommentsController extends Controller {
 		request =>
 		ContextualComments.allForContext(bucket, key) match {
 			case Some( l : List[ContextualComments]) => Ok(Json.toJson(l)).as("application/json")
-			case _ => BadRequest(Json.stringify(Json.obj("result" ->   "Unable to load messages")));
+			case _ => NoContent
 		}
 		
 	}

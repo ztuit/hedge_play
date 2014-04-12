@@ -36,3 +36,4 @@ POST   	/blog  				        			controllers.BlogController.create
 DELETE  /blog/:key  				        	controllers.BlogController.delete(key : String)
 POST    /contextcomment							controllers.ContextualCommentsController.create
 GET     /contextcomment/:bucket/:key			controllers.ContextualCommentsController.get(bucket : String, key : String)
+GET     /sandbox								controllers.SandboxController.all

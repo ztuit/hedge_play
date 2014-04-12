@@ -3,8 +3,48 @@
  */
 
  var sandBox = React.createClass({
+ 	getInitialState: function() {
+    	return {data: []};
+  	},
+ 	componentWillMount: function() {
+	    $.ajax({
+	      url: this.props.url,
+	      dataType: 'json',
+	      success: function(data) {
+	      	
+	        this.setState({data: data});
+	        
+	      }.bind(this),
+	      error: function(xhr, status, err) {
+	        console.error(this.props.url, status, err.toString());
+	      }.bind(this)
+	    });
+  	},
+ 	findApp : function(appname) {
+ 		document.getElementById("sandboxDesc").innerHTML=""
+ 		
+ 		React.renderComponent(
+			<fruitMachineContainer/>,
+			document.getElementById("sandboxContainer")
+			);
+ 	},
  	render : function () {
- 		return (<div class="sandBox">
+var self = this;
+ 			var sandCastles = this.state.data.map(function (sandcastle) {
+		    	
+		      return <article>
+ 						<h2>{sandcastle.shortdesc}</h2>
+ 						<figure>
+							<img src={sandcastle.img} alt={sandcastle.appname} />
+							<figcaption>{sandcastle.caption}</figcaption>
+						</figure>
+						<p>{sandcastle.longdesc}<a href="#" onClick={function(){self.findApp(sandcastle.appname)}}>View Here</a></p>
+					</article>;
+		    });
+
+ 		return (<div className="sandBox" >
+ 				<div id="sandboxContainer"></div>
+ 				<div id="sandboxDesc">
  				<header></header>
  				<nav>
  					<ul>
@@ -17,22 +57,8 @@
  					<header>
  						<h1>Experiements</h1>
  					</header>
- 					<article>
- 						<h2>Three.js fruit machine</h2>
- 						<figure>
-							<img src="assets/images/fruitmachine.jpeg" alt="fruit" />
-							<figcaption>Fruity</figcaption>
-						</figure>
-						<p>A three.js app simulating a fruit machine.</p>
-					</article>
-					<article>
- 						<h2>Scala Play! Framework using Riak for social mdeia</h2>
- 						<figure>
-							<img src="assets/images/riak.jpeg" alt="fruit" />
-							<figcaption>Riak</figcaption>
-						</figure>
-						<p>A Scala playframework. </p>
-					</article>
+ 					{sandCastles}
+					
 					<article>
  						<h2>Delauay Triangulation</h2>
  						<figure>
@@ -43,13 +69,21 @@
 					</article>
 					<footer></footer>
  				</section>
+ 				</div>
  				</div>)
  	}
  });
 
 
 
- var sandBoxItem = React.createClass({
- 	render : function() {
- 		return <div></div>;
- 	} });
+var sandCastle = new Backbone.Model.extend({
+	idAttribute : 'appname',
+	defaults :{
+		appname : "",
+		shortdesc : "",
+		img: "",
+		longdesc : "",
+		caption : ""
+	},
+	urlRoot : "/sandbox"
+});

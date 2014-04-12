@@ -69,9 +69,11 @@ object RiakClientWrapper {
 
 	def fetchAllForBucket(bucket : Bucket ) : Future[List[IRiakObject]] = {
 		val strArray  = (bucket.keys.getAll map {_.toString}).toArray
-		future {
+		val f = future {
 			bucket.multiFetch(strArray).execute map { _.get} toList
 		}
+		Await.result(f,500 millis)
+		f
 	}
 
 	def fetchValue(bucket : Bucket, key : RiakKey) : Option[IRiakObject] = {

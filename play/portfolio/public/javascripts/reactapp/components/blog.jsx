@@ -22,15 +22,15 @@ var blogEntries = React.createClass({
 	    });
   	}, 	
 	render: function() {
-		
+		var self = this;
 		if(this.props.readOnly=="false") {
 		    var blogNodes = this.state.data.map(function (blogEnt) {
 		    	
-		      return <blogEditor entry={blogEnt} />;
+		      return <blogEditor entry={blogEnt} router={self.props.router}/>;
 		    });
 		    return (<div className="blogList">
 		    			<div>
-		    				<blogEditor entry={{key:"", content:"", created:"", edited:""}}/>
+		    				<blogEditor entry={{key:"", content:"", created:"", edited:""}} router={self.props.router}/>
 		    				<br/><br/>
 		    			</div>
 				   		<div>
@@ -75,7 +75,8 @@ var blogEntries = React.createClass({
     	return {content: this.props.entry.content, 
     			info:"",
     			id : sid,
-    			edited : this.props.entry.edited};
+    			edited : this.props.entry.edited,
+    			show : true};
   	},
  	deleteEntry : function() {
  		var blog = new BlogModel();
@@ -85,15 +86,20 @@ var blogEntries = React.createClass({
 			blog.set("key",this.props.entry.key)
 		}
 		var self = this;
-		blog.destroy(null, {
-			success: function (model, response) {
+		blog.destroy({
+			success: function (model) {
 
-        		self.setState({info:"blog entry saved", edited : model.get("edited")});
+				tinyMCE.get(self.state.id).setContent("this blog entry has been deleted")
+        		self.setState({info:"blog entry deleted", edited : model.get("edited"), content : "this blog has been deleted."});
+  	
+        		
         	},
     		error: function (model, response) {
     			var msg = "blog entry save failed, reason: " + response.responseText
     			self.setState({info:msg});
     	} });
+ 
+    	
  	},
  	save : function () {
  		
@@ -112,11 +118,13 @@ var blogEntries = React.createClass({
 			success: function (model, response) {
 
         		self.setState({info:"blog entry saved", edited : model.get("edited")});
+        		self.props.router.navigate("myblog", {trigger : true}) 
         	},
     		error: function (model, response) {
     			var msg = "blog entry save failed, reason: " + response.responseText
     			self.setState({info:msg});
     	} });
+
  	},
  	subrender : function() {
  		if(this.props.entry.edited.length!=0)
@@ -130,7 +138,7 @@ var blogEntries = React.createClass({
 
  		return (
  				
- 				<div className="blogEditor" >
+ 				<div className="blogEditor" style={{display: this.linkState('show')}}>
  					
  					{newEntry}
     				<textarea id={this.state.id} valueLink={this.linkState('content')} ></textarea><br/>    				

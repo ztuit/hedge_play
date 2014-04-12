@@ -28,7 +28,7 @@ object Users extends Controller {
 	  		User.fromJson(json) match {
 	  				case Some(user) => User.validateNewUser(user) match {
 	  									case Success(user) => User.newUser(user) match { 
-	  																case Success(s) => Ok(Json.toJson(s)).as("application/json");
+	  																case Success(s) => Created(Json.toJson(s)).as("application/json");
 	  																case Failure(e) => BadRequest("Failed to save new user");
 	  															}
 	  									case Failure(e : UserException) => BadRequest(Json.toJson(e.id));

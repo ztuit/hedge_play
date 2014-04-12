@@ -14,7 +14,7 @@ object PrivateMessageThreadController extends Controller {
 		request =>
 		request.body.validate[PrivateMessageThread] match {
 			case s : JsSuccess[PrivateMessageThread] =>  PrivateMessageThread.create(s.get, (Json.parse(request.session.get("connectedAs").get) \ "user").as[String]) match {
-				case Success(_) => Ok(Json.obj("result" ->   "success"))
+				case Success(_) => Created(Json.obj("result" ->   "success"))
 				case Failure(_) => BadRequest(Json.stringify(Json.obj("result" ->   "Unable to save message")));
 			}
 			case _ => BadRequest(Json.stringify(Json.obj("result" ->   "Unable to parse user")));

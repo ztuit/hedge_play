@@ -22,7 +22,7 @@ object UserProfileController extends Controller {
 	def save(key : String) = Action(BodyParsers.parse.json) { request =>
 		request.body.validate[UserProfile] match {
 			case s : JsSuccess[UserProfile] => UserProfile.save(s.get) match {
-				case Success(_) => Ok(Json.obj("result" ->   "success"))
+				case Success(_) => Created(Json.obj("result" ->   "success"))
 				case _ => BadRequest(Json.stringify(Json.obj("result" ->   "Unable to save user")));
 			}
 			case _ => BadRequest(Json.stringify(Json.obj("result" ->   "Unable to parse user")));
@@ -45,7 +45,7 @@ object UserProfileController extends Controller {
   		request.body.file("userfile").map { picture => picture.ref.moveTo(tmpFile, true)}
 
   		UserProfile.updateUserPhoto(tmpFile, (Json.parse(request.session.get("connectedAs").get) \ "user").as[String]) match {
-  			case Success(_) => tmpFile.delete(); Ok("File uploaded")
+  			case Success(_) => tmpFile.delete(); Created("File uploaded")
   			case _ => BadRequest(Json.stringify(Json.obj("reason" ->   "Unable to update user")));
   		}
 	}

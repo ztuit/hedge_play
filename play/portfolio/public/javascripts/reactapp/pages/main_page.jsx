@@ -37,7 +37,7 @@ var MainRouter = Backbone.Router.extend({
 	portfolio : function() {
 		document.getElementById("content").innerHTML=""
 		React.renderComponent(
-			<sandBox/>,
+			<sandBox url="/sandbox" />,
 			document.getElementById("content")
 			);	
 	},
@@ -59,9 +59,9 @@ var MainRouter = Backbone.Router.extend({
 	},
 	myblog : function() {
 		document.getElementById("content").innerHTML=""
-
+		
 		React.renderComponent(
-			<blogEntries url="/blog" readOnly="false"/>,
+			<blogEntries url="/blog" readOnly="false" router={this}/>,
 			document.getElementById("content")
 			);
 	},
