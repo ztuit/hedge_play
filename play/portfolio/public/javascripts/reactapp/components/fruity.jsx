@@ -5,62 +5,42 @@
 
 var fruitMachineContainer =  React.createClass({
 	rollers :  null,
+	message : null,
 	camera : null,
 	scene : null,
 	renderer : null,
-	PIOVER2 : (Math.PI/2),
+	PIOVER6 : (Math.PI/3),
 	hex : null,
+	spun : false,
 	componentDidMount : function () {
 		this.rollers = new Array();
 		var container = document.getElementById('fruityCanvas')
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, canvas: container });
-      	this.renderer.setSize(700, 300);
+		var wwidth = 700;
+		var wheight = 300;
+      	this.renderer.setSize(wwidth, wheight);
       	
       // camera
-      this.camera = new THREE.PerspectiveCamera(90, 2.5, 1, 1000);
-      this.camera.position.z = 350;
+      this.camera = new THREE.PerspectiveCamera(90, wwidth/wheight, 1, 1000);
+      this.camera.position.z = 475;
       this.camera.position.x = 0;
-      this.camera.position.y = 0;
+      this.camera.position.y = 10;
  	  //this.camera.lookAt(0,0,0);
       // scene
       this.scene = new THREE.Scene();
                 
-      //texture
-    var material1 = new THREE.MeshLambertMaterial({
-        map: THREE.ImageUtils.loadTexture('assets/images/fruitmachine.jpeg'), 
-      });
-    var material2 = new THREE.MeshLambertMaterial({
-        map: THREE.ImageUtils.loadTexture('assets/images/riak.jpeg'), 
-      });
-    var material3 = new THREE.MeshLambertMaterial({
-        map: THREE.ImageUtils.loadTexture('assets/images/book_covers.png'), 
-      });
-    var material4 = new THREE.MeshLambertMaterial({
-        map: THREE.ImageUtils.loadTexture('assets/images/chong.jpeg'), 
-      });
-    var material5 = new THREE.MeshLambertMaterial({
-        map: THREE.ImageUtils.loadTexture('assets/images/favicon.png'), 
-      });
-    var material6 = new THREE.MeshLambertMaterial({
-        map: THREE.ImageUtils.loadTexture('assets/images/favicon.png'), 
-      });
-	var materials = [material5, material6,material3, material4,material1, material2];
- 
-    var meshFaceMaterial = new THREE.MeshFaceMaterial( materials );
       // cubes (rollers)
-      this.rollers[0] = this.buildCube(0,0,0, 200, meshFaceMaterial)
-    //  this.scene.add(this.rollers[0]);
+    var textureMesh = this.newMaterial();
+    this.rollers[1] = this.buildOcto(-200,0,0,200, textureMesh )
+    this.scene.add(this.rollers[1]);
       
-      this.rollers[1] = this.buildCube(-200,0,0, 200, meshFaceMaterial)
-     // this.scene.add(this.rollers[1]);
+     this.rollers[0] = this.rollers[1].clone();//this.buildOcto(0,0,0,  textureMesh.clone())
+     this.rollers[0].position.set(200,0,0)
+     this.scene.add(this.rollers[0]);
 
-      this.rollers[2] = this.buildCube(200,0,0, 200, meshFaceMaterial)
-      //this.scene.add(this.rollers[2]);
-
-      //Add in a octohydron as an experiement
-      this.hex = this.buildOcto(0,0,0,200, meshFaceMaterial)
-      this.scene.add(this.hex)
-
+     this.rollers[2] = this.rollers[1].clone();
+     this.rollers[2].position.set(0,0,0)
+     this.scene.add(this.rollers[2]);
 
       // add subtle ambient lighting
       var ambientLight = new THREE.AmbientLight(0x000044);
@@ -71,13 +51,42 @@ var fruitMachineContainer =  React.createClass({
       directionalLight.position.set(0, 0, 1).normalize();
       this.scene.add(directionalLight);
 
+      
+ 	 
+
 		this.renderer.render(this.scene, this.camera);
 		this.myrender();
 	},
+	newMaterial : function () {
+			  //texture
+	    var material1 = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide,
+	        map: THREE.ImageUtils.loadTexture('assets/images/fruitmachine.jpeg'), 
+	      }).clone();
+	    var material2 = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide,
+	        map: THREE.ImageUtils.loadTexture('assets/images/riak.jpeg'), 
+	      }).clone();
+	    var material3 = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide,
+	        map: THREE.ImageUtils.loadTexture('assets/images/book_covers.png'), 
+	      }).clone();
+	    var material4 = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide,
+	        map: THREE.ImageUtils.loadTexture('assets/images/chong.jpeg'), 
+	      }).clone();
+	    var material5 = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide,
+	        map: THREE.ImageUtils.loadTexture('assets/images/favicon.png'), 
+	      }).clone();
+	    var material6 = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide,
+	        map: THREE.ImageUtils.loadTexture('assets/images/delaunay.jpeg'), 
+	      }).clone();
+		var materials = [material5, material5, material6,material6,material3,material3, material4, material4, material1, material1, material2, material2];
+ 		return new THREE.MeshFaceMaterial(materials);
+	},
 	myrender : function () {
 		requestAnimationFrame(this.myrender);
-			this.hex.rotation.x += Math.PI/60;
+			
 				
+				if(this.message)
+					this.message.rotation.y += 	(Math.PI/40);
+
 				for( i=0;i<3;i++) {
 					if(this.rollers[i].cube1Dampener>-5 && this.rollers[i].cube1Dampener<1)  {
 						this.rollers[i].rotation.x += this.rollers[i].cube1Spin;
@@ -87,14 +96,15 @@ var fruitMachineContainer =  React.createClass({
 					} else if(this.rollers[i].cube1Dampener<=-5) {
 						//Need to rotate the cube to face forwards
 
-						var  remainder = this.rollers[i].rotation.x % this.PIOVER2;
-						var minRemainder = this.PIOVER2-remainder
+						var  remainder = this.rollers[i].rotation.x % this.PIOVER6;
+						var minRemainder = this.PIOVER6-remainder
 						if(minRemainder<0.2) { 
 							//console.log("Cube " + i)
 							//console.log(this.rollers[i].rotation.x)
 							//console.log(remainder)
 							this.rollers[i].rotation.x += minRemainder;
 							this.rollers[i].cube1Dampener=1;
+							this.hasJackpot();
 						} else {
 							//this.rollers[i].cube1Dampener=1;
 							//nudge fwd
@@ -105,6 +115,24 @@ var fruitMachineContainer =  React.createClass({
 
 				this.renderer.render(this.scene, this.camera);
 	},
+	hasJackpot : function () {
+		var x2 = (parseFloat(this.rollers[1].rotation.x.toFixed(5))  % (Math.PI*2)).toFixed(4) ;
+		var x1 = (parseFloat(this.rollers[0].rotation.x.toFixed(5))  % (Math.PI*2)).toFixed(4) ; 
+		var x3 = (parseFloat(this.rollers[2].rotation.x.toFixed(5))  % (Math.PI*2)).toFixed(4) ;
+		
+		console.log(x1 + " " + x2 + " " + x3)
+		if( (x1 == x3 ) && (x2 == x3 ) && this.spun==true) {
+			console.log("jp")
+			this.scene.remove(this.message);
+			this.message = this.createMessage("Jackpot!");
+			this.scene.add(this.message);
+		} else if ( ((x1 == x3 ) || (x2 == x3 ) || (x2 == x1 )) && this.spun==true ){
+			this.scene.remove(this.message);
+			this.message = this.createMessage("Half Jackpot!")
+			console.log("hapf jp")
+			this.scene.add(this.message);
+		}
+	},
 	buildCube : function(x, y, z, size, material ) {
 	  var c = new THREE.Mesh(new THREE.CubeGeometry(size, size, size), material);
       c.overdraw = true;
@@ -114,17 +142,7 @@ var fruitMachineContainer =  React.createClass({
       return c;
 	},
 	buildOcto : function(x, y, z, size, materialsz) {
-materials = [
 
-					new THREE.MeshLambertMaterial( { side: THREE.DoubleSide,  map: THREE.ImageUtils.loadTexture('assets/images/fruitmachine.jpeg') } ),
-					new THREE.MeshLambertMaterial( { side: THREE.DoubleSide,  map: THREE.ImageUtils.loadTexture('assets/images/chong.jpeg') } ),
-					new THREE.MeshLambertMaterial( { side: THREE.DoubleSide,  map: THREE.ImageUtils.loadTexture('assets/images/favicon.png') } ),
-					new THREE.MeshLambertMaterial( { side: THREE.DoubleSide,  map: THREE.ImageUtils.loadTexture('assets/images/fruitmachine.jpeg') } ),
-					new THREE.MeshLambertMaterial( { side: THREE.DoubleSide,  map: THREE.ImageUtils.loadTexture('assets/images/chong.jpeg') } ),
-					new THREE.MeshLambertMaterial( { side: THREE.DoubleSide,  map: THREE.ImageUtils.loadTexture('assets/images/favicon.png') } )				
-					//,
-					//new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe: true, transparent: true, opacity: 0.1 } )
-				];
 		//The hexon consists of six sides all seperated by 45 degrees, so we build six identical sides
 		//Then rotate by 45 degrees
 		var geometry = new THREE.Geometry();
@@ -136,42 +154,31 @@ materials = [
 		for(i=0;i<totalVertices;i+=vertices, j++) {
 			geometry.vertices.push( new THREE.Vector3( -100, -100, 173 ) ); 
 			geometry.vertices.push( new THREE.Vector3( 100, -100, 173 ) ); 
-			geometry.vertices.push( new THREE.Vector3( 100, 100, 173 ) ); 
 			geometry.vertices.push( new THREE.Vector3( -100, 100, 173 ) ); 
+			geometry.vertices.push( new THREE.Vector3( 100, 100, 173 ) ); 
 			geometry.faces.push( new THREE.Face3( i, i+1, i+2 ) ); 
-			geometry.faces.push( new THREE.Face3( i+2, i, i+3 ) ); 
+			geometry.faces.push( new THREE.Face3( i+1, i+3, i+2 ) ); 
 			
 			if(i<(totalVertices-vertices)) {
 				var rotation = new THREE.Matrix4().makeRotationX(Math.PI/3);
 				geometry.applyMatrix(rotation);
 			}
-			geometry.faceVertexUvs[ 0 ].push( [ new THREE.Vector2( 0, 0 ), new THREE.Vector2( 1, 0 ), new THREE.Vector2( 1, 1 )]);
-			geometry.faceVertexUvs[ 0 ].push( [ new THREE.Vector2( 1, 1 ), new THREE.Vector2( 0, 0 ), new THREE.Vector2( 0, 1 )]);
+			geometry.faceVertexUvs[ 0 ].push( [ new THREE.Vector2( 0, 0 ), new THREE.Vector2( 1, 0 ), new THREE.Vector2( 0, 1 )]);
+			geometry.faceVertexUvs[ 0 ].push( [ new THREE.Vector2( 1, 0 ), new THREE.Vector2( 1, 1 ), new THREE.Vector2( 0, 1 )]);
 		}
-			/*
-			geometry.vertices.push( new THREE.Vector3( -100, -100, 173 ) ); 
-			geometry.vertices.push( new THREE.Vector3( 100, -100, 173 ) ); 
-			geometry.vertices.push( new THREE.Vector3( 100, 100, 173 ) ); 
-			geometry.vertices.push( new THREE.Vector3( -100, 100, 173 ) ); 
-			geometry.faces.push( new THREE.Face3( 4, 5, 6 ) ); 
-			geometry.faces.push( new THREE.Face3( 6, 4, 7 ) ); 
-		*/
-			//var rotation = new THREE.Matrix4().makeRotationX(-Math.PI/4);
-			//geometry.applyMatrix(rotation);
-			geometry.faceVertexUvs[ 0 ].push( [ new THREE.Vector2( 0, 0 ), new THREE.Vector2( 1, 0 ), new THREE.Vector2( 1, 1 )]);
-			geometry.faceVertexUvs[ 0 ].push( [ new THREE.Vector2( 1, 1 ), new THREE.Vector2( 0, 0 ), new THREE.Vector2( 0, 1 )]);
+
 
 			for(i=0;i<12;i++) {	
-				geometry.faces[i].materialIndex = i % 6;
+				geometry.faces[i].materialIndex = i;
 			}
-		//geometry.faceVertexUvs[ 1 ].push( [ new THREE.Vector2( 0, 1 ), new THREE.Vector2( 1, 1 ), new THREE.Vector2( 0, 0 ) ] );
+		
 		geometry.computeCentroids();
-geometry.computeFaceNormals();
-geometry.computeVertexNormals();
+		geometry.computeFaceNormals();
+		geometry.computeVertexNormals();
 
-		object = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
+		object = new THREE.Mesh( geometry, materialsz); 
 		object.overdraw = true;
-		//object.rotation.x = -Math.PI/4;
+		
 		object.position.set( x,y,z);
 		
 		return object;
@@ -189,6 +196,38 @@ geometry.computeVertexNormals();
 		this.rollers[2].rotation.x = this.rollers[2].cube1Spin
 		this.rollers[2].spinRate = 1/(Math.floor(Math.random()*10.0) + 15);
 		this.rollers[2].cube1Dampener = 0.0;
+		this.scene.remove(this.message);
+		this.spun = true;
+	},
+	createMessage : function (s) {
+				var text3d = new THREE.TextGeometry( s, {
+
+					size: 80,
+					height: 20,
+					curveSegments: 2,
+					font: "optimer"
+
+				});
+				THREE.GeometryUtils.center( text3d )
+				text3d.computeBoundingBox();
+				var centerOffset = -0.5 * ( text3d.boundingBox.max.x - text3d.boundingBox.min.x );
+
+				var textMaterial = new THREE.MeshFaceMaterial( [ 
+					new THREE.MeshPhongMaterial( { color: 0xffffff, shading: THREE.FlatShading } ), // front
+					new THREE.MeshPhongMaterial( { color: 0xffffff, shading: THREE.SmoothShading } ) // side
+				] );
+				text = new THREE.Mesh( text3d, textMaterial );
+				
+				text.position.x = 0;
+				text.position.y = 200;
+				text.position.z = 200;
+
+				text.rotation.x =  Math.PI * 0.2;
+				text.rotation.y = Math.PI * 2;
+
+				group = new THREE.Object3D();
+
+		return text;
 	},
 	render : function () {
 		return <div>
