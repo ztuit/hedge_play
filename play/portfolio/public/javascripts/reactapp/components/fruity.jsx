@@ -12,6 +12,7 @@ var fruitMachineContainer =  React.createClass({
 	PIOVER6 : (Math.PI/3),
 	hex : null,
 	spun : false,
+	particleSystem : null,
 	componentDidMount : function () {
 		this.rollers = new Array();
 		var container = document.getElementById('fruityCanvas')
@@ -52,7 +53,10 @@ var fruitMachineContainer =  React.createClass({
       this.scene.add(directionalLight);
 
       
- 	 
+ 	 	this.scene.add(this.floorTexture())
+ 	 	this.scene.add(this.backgroundTexture())
+
+ 	 	this.particleTexture();
 
 		this.renderer.render(this.scene, this.camera);
 		this.myrender();
@@ -83,9 +87,14 @@ var fruitMachineContainer =  React.createClass({
 	myrender : function () {
 		requestAnimationFrame(this.myrender);
 			
-				
+				var smallPi = (Math.PI/40);
 				if(this.message)
-					this.message.rotation.y += 	(Math.PI/40);
+					this.message.rotation.y += 	smallPi;
+
+				if(this.particleSystem) {
+					this.particleSystem.rotation.y += Math.random()*smallPi*0.5;
+					this.particleSystem.rotation.z += Math.random()*smallPi*0.5;
+				}
 
 				for( i=0;i<3;i++) {
 					if(this.rollers[i].cube1Dampener>-5 && this.rollers[i].cube1Dampener<1)  {
@@ -126,11 +135,13 @@ var fruitMachineContainer =  React.createClass({
 			this.scene.remove(this.message);
 			this.message = this.createMessage("Jackpot!");
 			this.scene.add(this.message);
+			this.scene.add(this.particleSystem)
 		} else if ( ((x1 == x3 ) || (x2 == x3 ) || (x2 == x1 )) && this.spun==true ){
 			this.scene.remove(this.message);
 			this.message = this.createMessage("Half Jackpot!")
 			console.log("hapf jp")
 			this.scene.add(this.message);
+			this.scene.add(this.particleSystem)
 		}
 	},
 	buildCube : function(x, y, z, size, material ) {
@@ -198,6 +209,7 @@ var fruitMachineContainer =  React.createClass({
 		this.rollers[2].cube1Dampener = 0.0;
 		this.scene.remove(this.message);
 		this.spun = true;
+		this.scene.remove(this.particleSystem)
 	},
 	createMessage : function (s) {
 				var text3d = new THREE.TextGeometry( s, {
@@ -228,6 +240,40 @@ var fruitMachineContainer =  React.createClass({
 				group = new THREE.Object3D();
 
 		return text;
+	},
+	floorTexture : function () {
+		var floorTexture = new THREE.ImageUtils.loadTexture( 'assets/images/carpet.jpg' );
+		floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
+		floorTexture.repeat.set( 75, 75 );
+		var floorMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff, map: floorTexture, side: THREE.DoubleSide } );
+		var floorGeometry = new THREE.PlaneGeometry(10000, 10000,1,1);
+		var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+		floor.position.y = -180;
+		floor.rotation.x = Math.PI / 2;
+		return floor;
+	},
+	backgroundTexture : function() {
+		var bkgroundTexture = new THREE.ImageUtils.loadTexture( 'assets/images/casino_interior.jpeg' );
+		var bkgroundMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff, map: bkgroundTexture, side: THREE.DoubleSide } );
+		var bkgroundGeometry = new THREE.PlaneGeometry(4000, 1000,1,1);
+		var wall = new THREE.Mesh(bkgroundGeometry, bkgroundMaterial);
+		wall.position.z = -350;
+		wall.position.y = 300
+		return wall;
+	},
+	particleTexture : function () {
+		//particles
+ 	 	var particles = new THREE.Geometry;
+		for (var p = 0; p < 3000; p++) {
+		    var particle = new THREE.Vector3(Math.random() * 1500 - 150, Math.random() * 1500 - 150, Math.random() * 1550 - 350);
+		    particles.vertices.push(particle);
+		}
+		var particleTexture = THREE.ImageUtils.loadTexture("assets/images/glitter.png");
+		var particleMaterial = new THREE.ParticleBasicMaterial({ map: particleTexture, transparent: true, size: 18 });
+		this.particleSystem = new THREE.ParticleSystem(particles, particleMaterial);
+ 		this.particleSystem.position.x = -300;
+ 		this.particleSystem.position.y = 300;
+		//this.scene.add(this.particleSystem);
 	},
 	render : function () {
 		return <div>
