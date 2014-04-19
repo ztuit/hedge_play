@@ -55,13 +55,16 @@ var messageThread = React.createClass({
 	},
 	render : function() {
 		
+      var subject = "";
 	    var messageEntries = this.props.entries.map(function (messageEnt) {
+        subject = messageEnt.subject;
 	      return <messageEntry entry={messageEnt} />;
 	    });
-	   //messageEntries[messageEntries.length-1].props.subject})
-    	return <div className="messageThread">
-    				{messageEntries}
-    	    		<input type="button" value="reply" onMouseUp={this.reply} />
+
+    	return <div className="messagethread">
+                <label id="subject">{subject}</label>
+    				    {messageEntries}
+    	    		 <input type="button" value="reply" onMouseUp={this.reply} /><br/>
     			</div>;
 
 	}
@@ -74,11 +77,13 @@ var messageEntry = React.createClass({
       var receiveurl = "/user/photothumb/" + this.props.entry.recipient;
       var senderurl = "/user/photothumb/" + this.props.entry.sender;
     	return 	<div className="messageEntry">
-    	 			<label>To:</label><label>{this.props.entry.recipient}</label><img src={receiveurl} alt="*"/><br/>
-    				<label>From: {this.props.entry.sender}</label><img src={senderurl} alt="*"/><br/>
-    				<label>On: {this.props.entry.sent}</label><br/>
-    				<label>Subject:</label><label>{this.props.entry.subject} </label><br/>
-    				<textarea value={this.props.entry.content} readOnly/><br/>
+    				   
+    				  <label id="date">On: {this.props.entry.sent}</label><br/>
+    				 
+    				  <label>{this.props.entry.sender}</label><img src={senderurl} className="img-thumbnail" alt="*"/>
+              <div className="bubble me">
+                {this.props.entry.content}
+              </div>
     			</div>;
 	}
 });
@@ -122,7 +127,7 @@ var messageEntry = React.createClass({
  				<label>Recipient:</label><label>{this.props.recipient}</label><br/>
  				<label>Subject:</label><input type="text" valueLink={this.linkState('subject')} /><br/>
  				<textarea valueLink={this.linkState('content')} /><br/>
- 				<input type="button" value="send" onMouseUp={this.sendMessage}/><label>{this.state.info}</label>
+ 				<input type="button" value="send" onMouseUp={this.sendMessage}/><label className="alert alert-success">{this.state.info}</label>
  			</div>;
  	}
  });

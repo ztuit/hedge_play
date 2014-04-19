@@ -48,15 +48,36 @@ var createUserForm = React.createClass({
 		}
 	},
   	render : function() {
-    	return <div className="userEntryForm">
-    			<label>User Name:</label><input type="text" valueLink={this.linkState('name')}/><br/>
-    			<label>Password: </label><input type="password" valueLink={this.linkState('password')}/><br/>
-    			<label>Email:</label><input type="text" valueLink={this.linkState('email')}/><br/>
-    			<input type="button" value="Create User" onMouseUp={this.handleSubmit}/><br/>
-    			<label>Already have an account?</label> <a href="/login">Login Here</a>
-    			<br/>
-    			
-    		</div>;
+  		return <div className="navbar navbar-default navbar-fixed-top" role="navigation">
+			      <div className="container">
+			        <div className="navbar-header">
+			          <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+			            <span className="sr-only">Toggle navigation</span>
+			            <span className="icon-bar"></span>
+			            <span className="icon-bar"></span>
+			            <span className="icon-bar"></span>
+			          </button>
+			          <a className="navbar-brand" href="#"><img id="hedge_logo" src="assets/images/hedge_logo.jpeg" alt="HTS"/></a>
+			        </div>
+			        <div className="navbar-collapse collapse">
+			          <form className="navbar-form navbar-right" role="form">
+			            <div className="form-group">
+			              <input type="text" placeholder="username" className="form-control" valueLink={this.linkState('name')}/>
+			            </div><br/>
+			            <div  className="form-group">
+			              <input type="password" placeholder="Password" className="form-control" valueLink={this.linkState('password')}/>
+			            </div><br/>
+			            <div  className="form-group">
+			              <input type="email" placeholder="email address" className="form-control" valueLink={this.linkState('email')}/>
+			            </div><br/>			          
+			            <button  className="btn btn-success" onMouseUp={this.handleSubmit}>Create User {this.linkState('name')}</button>
+			            <br/>
+						<label>Already have an account?</label> <a href="/login">Login Here</a>
+			          </form>
+			        </div>
+			    </div>
+			  </div>;
+    	
   	}
 });
 

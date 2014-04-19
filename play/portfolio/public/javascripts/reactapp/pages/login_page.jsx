@@ -19,5 +19,15 @@ Backbone.history.start();
 
 React.renderComponent(
   <loginForm router={pageRouter}/>,
-  document.getElementById("loginForm")
+  document.getElementById("header_items")
+);
+
+		React.renderComponent(
+			<aboutComponent />,
+			document.getElementById("content")
+			);
+
+React.renderComponent(
+  <footerItems/>,
+  document.getElementById("pageFooter")
 );

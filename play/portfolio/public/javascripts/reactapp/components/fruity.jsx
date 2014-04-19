@@ -93,6 +93,7 @@ var fruitMachineContainer =  React.createClass({
 
 				if(this.particleSystem) {
 					this.particleSystem.rotation.y += Math.random()*smallPi*0.5;
+					this.particleSystem.rotation.x += Math.random()*smallPi*0.5;
 					this.particleSystem.rotation.z += Math.random()*smallPi*0.5;
 				}
 
@@ -253,7 +254,7 @@ var fruitMachineContainer =  React.createClass({
 		return floor;
 	},
 	backgroundTexture : function() {
-		var bkgroundTexture = new THREE.ImageUtils.loadTexture( 'assets/images/casino_interior.jpeg' );
+		var bkgroundTexture = new THREE.ImageUtils.loadTexture( 'assets/images/underwater.jpg' );
 		var bkgroundMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff, map: bkgroundTexture, side: THREE.DoubleSide } );
 		var bkgroundGeometry = new THREE.PlaneGeometry(4000, 1000,1,1);
 		var wall = new THREE.Mesh(bkgroundGeometry, bkgroundMaterial);
@@ -268,7 +269,7 @@ var fruitMachineContainer =  React.createClass({
 		    var particle = new THREE.Vector3(Math.random() * 1500 - 150, Math.random() * 1500 - 150, Math.random() * 1550 - 350);
 		    particles.vertices.push(particle);
 		}
-		var particleTexture = THREE.ImageUtils.loadTexture("assets/images/glitter.png");
+		var particleTexture = THREE.ImageUtils.loadTexture("assets/images/bubble.png");
 		var particleMaterial = new THREE.ParticleBasicMaterial({ map: particleTexture, transparent: true, size: 18 });
 		this.particleSystem = new THREE.ParticleSystem(particles, particleMaterial);
  		this.particleSystem.position.x = -300;

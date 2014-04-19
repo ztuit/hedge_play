@@ -71,7 +71,7 @@ var contextCommentEditor = React.createClass({
  				<div className="contextCommentEditor">
  					<label>Comment on this:</label><br/>
     				<textarea valueLink={this.linkState('content')}></textarea><br/>    				
-  					<input type="button" value="post comment" onMouseUp={this.save}/><label>{this.linkState('info')}</label>
+  					<button className="btn btn-primary" onMouseUp={this.save}>Post Comment</button><label>{this.linkState('info')}</label>
     			</div>);
 	  }
 });
@@ -82,10 +82,9 @@ var contextCommentEditor = React.createClass({
  		var commenterThumbUrl = "/user/photothumb/" + this.props.entry.author
  		return (
  				
- 				<div className="contextComment">
-    				<label>Created: </label><label>{this.props.entry.created}</label><br/>
-    				<label>By: </label><label>{this.props.entry.author}</label><img src={commenterThumbUrl} alt="*"/><br/>
-    				<div>{this.props.entry.content}</div><br/>    				  			
+ 				<div >
+    				<label>{this.props.entry.author}</label><img src={commenterThumbUrl} alt="*"/>
+    				<div className="bubble me">{this.props.entry.content}</div><label>{this.props.entry.created}</label><br/>    				  			
     			</div>);
 	  }
  });

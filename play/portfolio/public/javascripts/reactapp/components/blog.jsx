@@ -163,10 +163,10 @@ var blogViewer = React.createClass({
  		return (
  				
  				<div className="blogEntry">
- 					<label>Blogger:</label><label>{this.props.blogger}</label><img src={bloggerthumburl}/><br/>
+ 					<br/>
     				<label>Created: </label><label>{this.props.entry.created}</label><br/>
     				<label>Last Edited: </label><label>{this.props.entry.edited}</label><br/>
-    				<div dangerouslySetInnerHTML={{__html: this.state.content}} ></div><br/><br/>
+    				<label>{this.props.blogger}</label><img src={bloggerthumburl}/><div className="bubble me" dangerouslySetInnerHTML={{__html: this.state.content}} ></div><br/><br/>
     				<contextCommentViewer contextBucket="Blog" contextKey={this.props.entry.key} />    				
     			</div>);
 	  }

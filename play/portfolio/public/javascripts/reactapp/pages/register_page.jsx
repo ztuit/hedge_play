@@ -26,5 +26,15 @@ Backbone.history.start();
 
 React.renderComponent(
   <createUserForm router={pageRouter}/>,
-  document.getElementById("main")
+  document.getElementById("header_items")
+);
+
+		React.renderComponent(
+			<aboutComponent />,
+			document.getElementById("content")
+			);
+
+React.renderComponent(
+  <footerItems/>,
+  document.getElementById("pageFooter")
 );

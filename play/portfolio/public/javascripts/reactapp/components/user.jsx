@@ -31,7 +31,7 @@ var userSnapshot = React.createClass({
 	},
   	render : function() {
     	return <div className="userSnapshot">
-    			<label>{this.linkState('name')}</label><img src="/user/photothumb" alt="*"/><label> Since: </label><label>{this.linkState('time')} </label><a href="#" onClick={this.logout}>logout</a></div>;
+    			<label>{this.linkState('name')}</label><img className="img-thumbnail" src="/user/photothumb" alt="*"/><label> Since: </label><label>{this.linkState('time')} </label><a href="#" onClick={this.logout}>logout</a></div>;
   	}
 });
 
