@@ -69,9 +69,9 @@ var contextCommentEditor = React.createClass({
  		return (
  				
  				<div className="contextCommentEditor">
- 					<label>Comment on this:</label><br/>
-    				<textarea valueLink={this.linkState('content')}></textarea><br/>    				
-  					<button className="btn btn-primary" onMouseUp={this.save}>Post Comment</button><label>{this.linkState('info')}</label>
+ 					<span className="label label-primary" >Comment on this:</span><br/>
+    				<textarea className="form-control" valueLink={this.linkState('content')}></textarea><br/>    				
+  					<button className="btn btn-success" onMouseUp={this.save}>Post Comment</button><label>{this.linkState('info')}</label>
     			</div>);
 	  }
 });

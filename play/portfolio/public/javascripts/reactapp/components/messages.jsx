@@ -38,7 +38,7 @@ var messageViewer = React.createClass({
             <div style={{display: this.props.allowSend}}><label>New message thread</label><br/>
             <messageSender url={this.props.url} previous="" /><br/></div>
     				<label>Current Message Threads</label><br/><br/>
-    				{mThread}
+    				{mThread}<br/>
     			</div>
 	}
 });
@@ -64,7 +64,8 @@ var messageThread = React.createClass({
     	return <div className="messagethread">
                 <label id="subject">{subject}</label>
     				    {messageEntries}
-    	    		 <input type="button" value="reply" onMouseUp={this.reply} /><br/>
+    	    		 <button  className="btn btn-success"  onMouseUp={this.reply} >Reply</button>
+               <br/><br/>
     			</div>;
 
 	}
@@ -124,10 +125,12 @@ var messageEntry = React.createClass({
   	},
  	render : function() {
  		return <div className="messageSender" >
- 				<label>Recipient:</label><label>{this.props.recipient}</label><br/>
- 				<label>Subject:</label><input type="text" valueLink={this.linkState('subject')} /><br/>
- 				<textarea valueLink={this.linkState('content')} /><br/>
- 				<input type="button" value="send" onMouseUp={this.sendMessage}/><label className="alert alert-success">{this.state.info}</label>
+ 				<span className="label label-info">Recipient:</span><label>{this.props.recipient}</label><br/>
+ 				<span className="label label-info">Subject:</span><input className="form-control" type="text" valueLink={this.linkState('subject')} />
+ 				<span className="label label-info">Message:</span>
+        <textarea className="form-control" valueLink={this.linkState('content')} />
+ 				<button className="btn btn-success"  onMouseUp={this.sendMessage} >Post</button><br/>
+        <label className="alert alert-success">{this.state.info}</label>
  			</div>;
  	}
  });

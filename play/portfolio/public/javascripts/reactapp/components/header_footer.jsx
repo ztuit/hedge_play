@@ -6,7 +6,7 @@
 var headerItems = React.createClass({
 	render : function() {
 			return <div id="mainheader" className="navbar navbar-default navbar-fixed-top" role="header">
-			      <div className="container">
+			      <div className="container-fluid">
 			        <div className="navbar-header">
 			          <div className="navbar-form navbar-left" >
 			          <a className="navbar-brand" href="#"><img id="hedge_logo" src="assets/images/hedge_logo.jpeg" alt="HTS"/></a>
