@@ -28,7 +28,7 @@ var blogEntries = React.createClass({
 		    	
 		      return <blogEditor entry={blogEnt} router={self.props.router}/>;
 		    });
-		    return (<div className="blogList">
+		    return (<div className="blogList panel panel-primary body-padding">
 		    			<div>
 		    				<blogEditor entry={{key:"", content:"", created:"", edited:""}} router={self.props.router}/>
 		    				<br/><br/>

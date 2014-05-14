@@ -99,7 +99,7 @@ React.renderComponent(
 );
 
 React.renderComponent(
-  <mainMenu router={mainRouter} />,
+  <mainMenu router={mainRouter} user={userSS}/>,
   document.getElementById("main_menu")
 );
 

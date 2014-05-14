@@ -4,7 +4,7 @@
 
  var aboutComponent = React.createClass({
  	render : function () {
- 		return (<div className="aboutBox">
+ 		return (<div className="panel panel-primary body-padding" >
  				<header></header>
  				<nav>
  					<ul>

@@ -30,8 +30,12 @@ var userSnapshot = React.createClass({
 		
 	},
   	render : function() {
-    	return <div className="userSnapshot">
-    			<label>{this.linkState('name')}</label><img className="img-thumbnail" src="/user/photothumb" alt="*"/><label> Since: </label><label>{this.linkState('time')} </label><a href="#" onClick={this.logout}>logout</a></div>;
+    	return <ol className="breadcrumb">
+    			<li>{this.linkState('name')}</li>
+    			<li><img className="img-thumbnail" src="/user/photothumb" alt="*"/></li>
+    			<li> Since: {this.linkState('time')} </li>
+    			<li><a href="#" onClick={this.logout}>logout</a></li>
+    			</ol>;
   	}
 });
 
@@ -140,14 +144,41 @@ var userProfile = React.createClass({
 	},
   	render : function() {
     	return <div className="userProfile">
-    				<label>Created: </label><label>{this.linkState('created')}</label><br/>
-    				<label>Username: </label><label>{this.linkState('username')}</label><br/>
-    				<label>Role: </label><label>{this.linkState('role')}</label><br/>
-    				<label>Name: </label><input type="text" valueLink={this.linkState('fullname')}/><br/>
-    				<label>Pic:</label><img src="/user/photo" alt="pic"/><br/>
-    				<input type="file" id="fileUplad" name="change picture"/><input type="button" value="Upload Picture" onMouseUp={this.uploadFile}/><br/>
-    				<label>About: </label><br/><textarea id="profiledesc" valueLink={this.linkState('description')}/><br/>
-    				<input type="button" value="Update" onMouseUp={this.update}/><label>{this.linkState('updatemessage')}</label><br/><br/>
+    				<div className="col-sm-20 col-md-20 col-lg-20">
+    					<div className="panel panel-primary body-padding">
+    						<div className="panel-heading header-padding">
+    							<h3 className="panel-title">{this.linkState('username')} edit profile</h3>
+  							</div>
+	  						<div className="panel-body">
+			    				<span className="label label-info">Registered on: {this.linkState('created')}</span><br/>
+			    				<span className="label label-info">Role: {this.linkState('role')}</span><br/>
+			    				<form role="form">
+				    				<div className="row">
+				    					<label className="col-xs-1" for="inputName">Name: </label>
+				    					<div className="col-md-4">
+				    						<input id="inputName" type="text" className="form-control" valueLink={this.linkState('fullname')}/><br/>
+				    					</div>
+				    				</div>
+			    				</form>
+			    				<form role="form">
+				    				<div className="row">
+				    					<label className="col-xs-1" for="inputEmail">Email: </label>
+				    					<div className="col-md-4">
+				    						<input id="inputEmail" type="text" className="form-control" valueLink={this.linkState('email')}/><br/>
+				    					</div>
+				    				</div>
+			    				</form>
+			    				<img className="thumbnail" src="/user/photo" alt="pic"/>
+			    				<div className="btn-group">
+ 									<button type="file" className="btn btn-success">Change picture</button>
+  									<button type="button" onMouseUp={this.uploadFile} className="btn btn-success">Upload Picture</button>
+								</div>
+			    				<br/><br/>
+			    				<label>About {this.linkState('username')} :</label><br/><textarea id="profiledesc" valueLink={this.linkState('description')}/><br/>
+			    				<input className="btn btn-success" type="button" value="Update" onMouseUp={this.update}/><label>{this.linkState('updatemessage')}</label><br/><br/>
+    						</div>
+    					</div>
+    				</div>
     			</div>;
   	}
 });
@@ -210,16 +241,27 @@ UserProfileModel = Backbone.Model.extend({
 	},
  	render: function() {
  		var imgsrc = "/user/photo/" + this.props.profile.username
- 		return (<div><br/><br/>
- 				
- 				<div className="userProfileView">
-    				<label>Created: </label><label>{this.props.profile.created}</label><br/>
-    				<label>Username: </label><label>{this.props.profile.username}</label><span/><input type="button" value="Send Message" onMouseUp={this.requestMessageEntry}/><br/>
-    				<label>Name: </label><label>{this.props.profile.fullname}</label><br/>
-    				<label>Role: </label><label>{this.props.profile.role}</label><br/>
-    				<label>Pic:</label><img src={imgsrc} alt="*"/><br/>
-    				
-    				<label>About: </label><br/><div dangerouslySetInnerHTML={{__html: this.props.profile.description}}/><br/><input type="button" value="View blog" onMouseUp={this.viewBlog}/>
-    			</div></div>);
+ 		return <div className="userProfile">
+    				<div >
+    					<div className="panel panel-primary body-padding">
+    						<div className="panel-heading header-padding">
+    							<h3 className="panel-title">{this.props.profile.username}  profile</h3>
+    							<p/>
+    							<input type="button" className="btn btn-success" value="Send Message" onMouseUp={this.requestMessageEntry}/>
+    							<input type="button" className="btn btn-success" value="View blog" onMouseUp={this.viewBlog}/>
+  							</div>
+	  						<div className="panel-body">
+			    				<span className="label label-info">Name: {this.props.profile.username}</span><br/>
+			    				<span className="label label-info">Role: {this.props.profile.role}</span><br/>
+			    				
+			    				<img className="thumbnail" src={imgsrc} alt="pic"/>
+			    				<label>About: </label><br/><div dangerouslySetInnerHTML={{__html: this.props.profile.description}}/>
+			    				
+    						</div>
+    					</div>
+    				</div>
+    			</div>;
+
+ 		
 	  }
  });

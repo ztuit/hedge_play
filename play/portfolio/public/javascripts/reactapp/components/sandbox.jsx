@@ -42,7 +42,7 @@ var self = this;
 					</article>;
 		    });
 
- 		return (<div className="sandBox" >
+ 		return (<div className="sandBox panel panel-primary body-padding" >
  				<div id="sandboxContainer"></div>
  				<div id="sandboxDesc">
  				<header></header>

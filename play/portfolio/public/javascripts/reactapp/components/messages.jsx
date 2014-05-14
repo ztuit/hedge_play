@@ -34,7 +34,7 @@ var messageViewer = React.createClass({
 	      		return <div></div>;
 	      	}
 	    });
-    	return <div className="messageViewer">
+    	return <div className="messageViewer panel panel-primary body-padding">
             <div style={{display: this.props.allowSend}}><label>New message thread</label><br/>
             <messageSender url={this.props.url} previous="" /><br/></div>
     				<label>Current Message Threads</label><br/><br/>

@@ -46,9 +46,7 @@ padding: 10px;
 float: left;
 }
 
-#riak_logo  {
-float: right;
-}
+
 
 .sandBox header, section, footer, aside, nav, article, figure, figcaption {
 				display: block;}
@@ -66,6 +64,7 @@ display:table;
 #aboutaside {
 	display:table-cell;
 	width: 300px;
+     border-style: solid;
 }
 
 
@@ -145,7 +144,7 @@ display:table;
     border-width: 20px 22px 33px 28px;
     -moz-border-image: url(../images/bodercolourful.jpg) 20 22 33 28;
     -webkit-border-image: url(../images/bodercolourful.jpg) 20 22 33 28;
-    -o-border-image: url(../images/../images/bodercolourful.jpg) 20 22 33 28;
+    -o-border-image: url(../images/bodercolourful.jpg) 20 22 33 28;
     border-image: url(../images/bodercolourful.jpg) 20 22 33 28;
 }
 
@@ -169,7 +168,7 @@ display:table;
 }
 
 #pageheader {
-    height : 170px;
+    height : 180px;
 
 }
 
@@ -180,10 +179,52 @@ display:table;
 }
 
 #content { 
-    padding-top: 60px;
+    padding-top: 80px;
 }
 
-#mainheader {
-    height : 170px;
+.mainheader {
+    height : 250px;
     display: block;
+    position: fixed;
+    width: 100%;
+    background: url('../images/background.jpg') no-repeat center center;
+    background-size: 100% 100%;
+    z-index:10;
 }
+
+.mainheader  div {
+     
+    margin-top:  5px;
+}
+
+
+body {
+    background: url('../images/background.jpg') no-repeat center center;
+    background-size: 100% 100%;
+    padding:0;
+    margin:0;
+}
+
+
+
+
+
+.body-padding {
+    margin-left:  -50px;
+    margin-right: -50px;
+    padding-left:  24px;
+    padding-right:  24px;
+}
+
+.header-padding {
+    margin-left:  -25px;
+    margin-right: -25px;
+    padding-left:  0px;
+    padding-right:  0px;
+}
+
+.tst li {
+    padding-top: 1%;
+    height: 0px;
+}
+

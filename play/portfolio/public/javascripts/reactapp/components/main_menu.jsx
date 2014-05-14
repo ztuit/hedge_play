@@ -9,39 +9,56 @@
 
 
 var mainMenu = React.createClass({
-	 profile : function() {
+	 setNav : function(e) {
+	 	$("#mi").find(".active").attr("class", "")
+	 	$(e.target).parent().attr("class", "active")
+	 },
+	 profile : function(e) {
+	 	this.setNav(e);
 	 	this.props.router.navigate("profile", {trigger : true})
 	 },
-	 users : function() {
+	 users : function(e) {
+	 	this.setNav(e);
+	 	
 	 	this.props.router.navigate("users", {trigger : true})
 	 },
-	 portfolio : function() {
+	 portfolio : function(e) {
+	 	this.setNav(e);
 	 	this.props.router.navigate("portfolio", {trigger : true})
 	 },
-	 mymessages : function() {
+	 mymessages : function(e) {
+	 	this.setNav(e);
 	 	this.props.router.navigate("privatemessages", {trigger : true})
 	 },
-	 forum : function () {
+	 forum : function (e) {
+	 	this.setNav(e);
 	 	this.props.router.navigate("forum", {trigger : true})
 	 },
-	 myblog : function () {
+	 myblog : function (e) {
+	 	this.setNav(e);
 	 	this.props.router.navigate("myblog", {trigger : true})
 	 },
-	 about : function() {
+	 about : function(e) {
+	 	this.setNav(e);
 	 	this.props.router.navigate("about", {trigger : true})
 	 },
   	render : function() {
     	return <div className="navbar navbar-inverse">
     			<nav className="navbar-collapse collapse">
-	    			<ul className="nav navbar-nav">
-		    			<li><a href="#" onClick={this.profile}>my profile</a></li><li><a href="#" onClick={this.mymessages}> my messages</a></li>
-		    			<li><a href="#" onClick={this.myblog}> my blog</a></li>
-						<li><a href="#" onClick={this.users}> profiles</a></li>
-						<li><a href="#" onClick={this.portfolio}> sandbox apps</a></li>
-						<li><a href="#" onClick={this.forum}> discussion</a></li>
-						<li><a href="#" onClick={this.about}> about</a></li>
+	    			<ul id="mi" className="nav navbar-nav">
+		    			<li id="profile" ><a href="#" onClick={this.profile}>my profile</a></li>
+		    			<li><a href="#" onClick={this.mymessages}> my messages</a></li>
+		    			<li id="blog" ><a href="#" onClick={this.myblog}> my blog</a></li>
+						<li id="profiles" ><a href="#" onClick={this.users}> profiles</a></li>
+						<li id="toybox" ><a href="#" onClick={this.portfolio}> experiments</a></li>
+						<li id="discussion" ><a href="#" onClick={this.forum}> discussion</a></li>
+						<li id="about" ><a href="#" onClick={this.about}> about</a></li>
 	    			</ul>
+	    			<ul className="nav navbar-nav navbar-right tst">
+        				<li >{this.props.user}</li>
+        			</ul>
     			</nav>
+    			
     		</div>;
   	}
 });
