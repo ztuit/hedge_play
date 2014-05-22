@@ -21,7 +21,7 @@ object Global extends GlobalSettings {
   				case _ => request.path match {
   					case ("/login") => super.onRouteRequest(request)
   					case ("/register") => super.onRouteRequest(request)
-  					case _ => Some(Action { BadRequest("No User and unrecognised referer") })
+  					case _ => Some(Action { Redirect("/login") })
           }
   			}
 
@@ -30,9 +30,10 @@ object Global extends GlobalSettings {
 
   def checkWriteAccess(request : RequestHeader, uval : JsValue): Option[Handler] = {
     val isSystem = ((uval \ "role").as[String]).contains("system")
+    println(request.path)
       request.method match {
         case "GET" => super.onRouteRequest(request)
-        case _ if(isSystem==true) => Some(Action { Unauthorized("System account cannot be updated. Connect as a different User.") })
+        case _ if(isSystem==true && request.path!="/login") => Some(Action { Unauthorized("System account cannot be updated. Connect as a different User.") })
         case _  => super.onRouteRequest(request)
       }
   }

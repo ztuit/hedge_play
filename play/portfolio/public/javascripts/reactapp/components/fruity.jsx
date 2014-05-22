@@ -16,7 +16,11 @@ var fruitMachineContainer =  React.createClass({
 	componentDidMount : function () {
 		this.rollers = new Array();
 		var container = document.getElementById('fruityCanvas')
-		this.renderer = new THREE.WebGLRenderer({ antialias: true, canvas: container });
+		if (window.WebGLRenderingContext)
+			renderer = new THREE.WebGLRenderer({ antialias: true, canvas: container });
+		else
+			renderer = new THREE.CanvasRenderer({ antialias: true, canvas: container });
+
 		var wwidth = 700;
 		var wheight = 300;
       	this.renderer.setSize(wwidth, wheight);

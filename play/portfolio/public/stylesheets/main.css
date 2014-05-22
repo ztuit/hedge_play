@@ -42,8 +42,10 @@ padding: 10px;
 	display: inline-block;
 }
 
-#hedge_logo img {
+.headerBrand  {
 float: left;
+ width : 300px;
+ height : 150px;
 }
 
 
@@ -130,24 +132,23 @@ display:table;
     display: inline-block;
 }
 
-.techborder {
-    border-style: solid;
-    border-width: 20px;
-    -moz-border-image: url(../images/Tech-border2.png) 27 repeat;
-    -webkit-border-image: url(../images/Tech-border2.png) 27 repeat;
-    -o-border-image: url(../images/Tech-border2.png) 27 repeat;
-    border-image: url(../images/Tech-border2.png) 27 fill repeat;
+.footerLogo {
+    font-family: Palatino;
+    font-weight: bold;
+    text-transform: capitalize;
+    font-style: italic;
 }
 
-.colourborder {
-     border-style: solid;
-    border-width: 20px 22px 33px 28px;
-    -moz-border-image: url(../images/bodercolourful.jpg) 20 22 33 28;
-    -webkit-border-image: url(../images/bodercolourful.jpg) 20 22 33 28;
-    -o-border-image: url(../images/bodercolourful.jpg) 20 22 33 28;
-    border-image: url(../images/bodercolourful.jpg) 20 22 33 28;
+.pContainer {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin-bottom: 0 auto -4em;
 }
 
+.pFooter, .push {
+    height: 4em;
+}
 
 
 .messagethread #subject {
@@ -172,14 +173,29 @@ display:table;
 
 }
 
-#main_menu {
+
+.main_menu {
  position: fixed;
  width: 100%;
  z-index:10;
+ margin-top: 200px;
+ padding-top: 10px;
 }
 
+
+
+/* Landscape phone to portrait tablet */
+@media (min-width: 768px) and (max-width: 979px) { 
 #content { 
-    padding-top: 80px;
+    padding-top: 150px;
+}
+}
+
+/* Large desktop */
+@media (min-width: 979px) {
+#content { 
+    padding-top: 100px;
+}
 }
 
 .mainheader {
@@ -187,7 +203,7 @@ display:table;
     display: block;
     position: fixed;
     width: 100%;
-    background: url('../images/background.jpg') no-repeat center center;
+    background: url('../images/background.gif') no-repeat center center;
     background-size: 100% 100%;
     z-index:10;
 }
@@ -195,23 +211,30 @@ display:table;
 .mainheader  div {
      
     margin-top:  5px;
+
 }
+
 
 
 body {
-    background: url('../images/background.jpg') no-repeat center center;
+    background: url('../images/background.gif') no-repeat center center;
     background-size: 100% 100%;
     padding:0;
     margin:0;
+    height: 100%;
 }
 
-
-
-
+html { 
+  background: url('../images/background.gif') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
 
 .body-padding {
-    margin-left:  -50px;
-    margin-right: -50px;
+    margin-left:  -0px;
+    margin-right: -0px;
     padding-left:  24px;
     padding-right:  24px;
 }

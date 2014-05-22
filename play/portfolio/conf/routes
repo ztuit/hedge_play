@@ -12,7 +12,7 @@ GET		/users/:key               				controllers.Users.get(key : String)
 POST	/users									controllers.Users.create
 POST	/users/delete/:key						controllers.Users.delete(key : String)
 GET	    /login									controllers.Application.login
-POST	/login									controllers.Users.login
+PUT		/login									controllers.Users.login
 GET    	/logout/:key							controllers.Users.logout(key : String)
 GET     /register				    			controllers.Users.register
 GET 	/connected/:id							controllers.Application.connected(id : String)

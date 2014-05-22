@@ -43,23 +43,22 @@ var mainMenu = React.createClass({
 	 	this.props.router.navigate("about", {trigger : true})
 	 },
   	render : function() {
-    	return <div className="navbar navbar-inverse">
-    			<nav className="navbar-collapse collapse">
-	    			<ul id="mi" className="nav navbar-nav">
-		    			<li id="profile" ><a href="#" onClick={this.profile}>my profile</a></li>
-		    			<li><a href="#" onClick={this.mymessages}> my messages</a></li>
-		    			<li id="blog" ><a href="#" onClick={this.myblog}> my blog</a></li>
-						<li id="profiles" ><a href="#" onClick={this.users}> profiles</a></li>
-						<li id="toybox" ><a href="#" onClick={this.portfolio}> experiments</a></li>
-						<li id="discussion" ><a href="#" onClick={this.forum}> discussion</a></li>
-						<li id="about" ><a href="#" onClick={this.about}> about</a></li>
-	    			</ul>
-	    			<ul className="nav navbar-nav navbar-right tst">
-        				<li >{this.props.user}</li>
-        			</ul>
-    			</nav>
-    			
-    		</div>;
+    	return <nav className="main_menu navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+			    			<div className="container-fluid">
+				    			<ul id="mi" className="nav navbar-nav">
+					    			<li id="profile" ><a href="#" onClick={this.profile}>my profile</a></li>
+					    			<li><a href="#" onClick={this.mymessages}> my messages</a></li>
+					    			<li id="blog" ><a href="#" onClick={this.myblog}> my blog</a></li>
+									<li id="profiles" ><a href="#" onClick={this.users}> profiles</a></li>
+									<li id="toybox" ><a href="#" onClick={this.portfolio}> experiments</a></li>
+									<li id="discussion" ><a href="#" onClick={this.forum}> discussion</a></li>
+									<li id="about" ><a href="#" onClick={this.about}> about</a></li>
+				    			</ul>
+				    			<ul className="nav navbar-nav navbar-right">
+			        				<li >{this.props.user}</li>
+			        			</ul>
+			    			</div>
+	    		</nav>;
   	}
 });
 
