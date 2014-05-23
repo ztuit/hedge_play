@@ -88,20 +88,17 @@ Backbone.history.start();
 
 var userSS = new userSnapshot();
 
-//React.renderComponent(
- // userSS,
- // document.getElementById("user_details")
-//);
 
-React.renderComponent(
-  <headerItems user={userSS}/>,
-  document.getElementById("header_items")
-);
 
-React.renderComponent(
-  <mainMenu router={mainRouter} user={userSS}/>,
-  document.getElementById("main_menu")
-);
+ React.renderComponent(
+   <headerItems user={userSS}/>,
+   document.getElementById("header_items")
+ );
+
+ React.renderComponent(
+   <mainMenu router={mainRouter} user={userSS}/>,
+   document.getElementById("main_menu")
+ );
 
 React.renderComponent(
   <footerItems/>,

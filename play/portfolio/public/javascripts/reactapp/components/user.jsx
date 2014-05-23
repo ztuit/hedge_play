@@ -80,10 +80,9 @@ var userProfile = React.createClass({
 
 	    $.ajax({
 	      url: "/user/photo",
-	      dataType: 'image/png',
+	      dataType: 'text',
 	      success: function(data) {
-	        alert(data)
-	        
+	       
 	      }.bind(this),
 	      error: function(xhr, status, err) {
 	        console.error(this.props.url, status, err.toString());
@@ -170,7 +169,7 @@ var userProfile = React.createClass({
 			    				</form>
 			    				<img className="thumbnail" src="/user/photo" alt="pic"/>
 			    				<div className="btn-group">
- 									<button type="file" className="btn btn-success">Change picture</button>
+ 									<input type="file" id="fileUplad" className="btn btn-success"/>
   									<button type="button" onMouseUp={this.uploadFile} className="btn btn-success">Upload Picture</button>
 								</div>
 			    				<br/><br/>

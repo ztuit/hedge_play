@@ -1,3 +1,19 @@
+* {
+    margin: 0;
+}
+html, body {
+    height: 100%;
+}
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -5 em; /* the bottom margin is the negative value of the footer's height */
+}
+.footer, .push {
+    height: 5 em; /* .push must be the same height as .footer */
+}
+
 .messageThread {
 border:1px solid;
 }
@@ -133,21 +149,11 @@ display:table;
 }
 
 .footerLogo {
-    font-family: Palatino;
+   font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
     font-weight: bold;
     text-transform: capitalize;
     font-style: italic;
-}
-
-.pContainer {
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin-bottom: 0 auto -4em;
-}
-
-.pFooter, .push {
-    height: 4em;
+    color : white;
 }
 
 
@@ -170,7 +176,6 @@ display:table;
 
 #pageheader {
     height : 180px;
-
 }
 
 
@@ -208,29 +213,21 @@ display:table;
     z-index:10;
 }
 
-.mainheader  div {
-     
+.mainheader  div { 
     margin-top:  5px;
-
 }
 
 
 
 body {
     background: url('../images/background.gif') no-repeat center center;
-    background-size: 100% 100%;
-    padding:0;
+    background-size: 100% 400%;
+    padding-top:0;
     margin:0;
     height: 100%;
 }
 
-html { 
-  background: url('../images/background.gif') no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
+
 
 .body-padding {
     margin-left:  -0px;
@@ -244,10 +241,5 @@ html {
     margin-right: -25px;
     padding-left:  0px;
     padding-right:  0px;
-}
-
-.tst li {
-    padding-top: 1%;
-    height: 0px;
 }
 

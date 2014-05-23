@@ -48,35 +48,62 @@ var createUserForm = React.createClass({
 		}
 	},
   	render : function() {
-  		return <div className="navbar navbar-default navbar-fixed-top" role="navigation">
-			      <div className="container">
-			        <div className="navbar-header">
-			          <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-			            <span className="sr-only">Toggle navigation</span>
-			            <span className="icon-bar"></span>
-			            <span className="icon-bar"></span>
-			            <span className="icon-bar"></span>
-			          </button>
-			          <a className="navbar-brand" href="#"><img id="hedge_logo" src="assets/images/hedge_logo.jpeg" alt="HTS"/></a>
-			        </div>
-			        <div className="navbar-collapse collapse">
-			          <form className="navbar-form navbar-right" role="form">
-			            <div className="form-group">
-			              <input type="text" placeholder="username" className="form-control" valueLink={this.linkState('name')}/>
-			            </div><br/>
-			            <div  className="form-group">
-			              <input type="password" placeholder="Password" className="form-control" valueLink={this.linkState('password')}/>
-			            </div><br/>
-			            <div  className="form-group">
-			              <input type="email" placeholder="email address" className="form-control" valueLink={this.linkState('email')}/>
-			            </div><br/>			          
-			            <button  className="btn btn-success" onMouseUp={this.handleSubmit}>Create User {this.linkState('name')}</button>
-			            <br/>
-						<label>Already have an account?</label> <a href="/login">Login Here</a>
-			          </form>
-			        </div>
-			    </div>
-			  </div>;
+  		return  <div id="mainheader" className="mainheader" role="header">
+					<div className="container-fluid">
+						<div className="row">
+							<div className="col-sm-4">
+								<a  href="#"><img id="hedge_logo" className="headerBrand" src="assets/images/hedge_logo.png" alt="HTS"/></a>
+				        	</div>
+				        	<div className="col-sm-1 col-sm-offset-5 col-md-1 col-md-offset-6">
+					    		 <form className="navbar-form navbar-right" role="form">
+			            			<div className="form-group">
+			              				<input type="text" placeholder="username" className="form-control" valueLink={this.linkState('name')}/>
+			            			</div><br/>
+			            			<div  className="form-group">
+			              				<input type="password" placeholder="Password" className="form-control" valueLink={this.linkState('password')}/>
+			            			</div><br/>
+			            			<div  className="form-group">
+			              				<input type="email" placeholder="email address" className="form-control" valueLink={this.linkState('email')}/>
+			            			</div><br/>			          
+			            			<button  className="btn btn-success" onMouseUp={this.handleSubmit}>Create User {this.linkState('name')}</button>
+			            			<br/>
+									<label>Already have an account?</label> <a href="/login">Login Here</a>
+			          			</form>
+					    	</div>
+					    </div>
+
+					</div>
+			    </div>;
+
+  		// return <div className="navbar navbar-default navbar-fixed-top" role="navigation">
+			 //      <div className="container">
+			 //        <div className="navbar-header">
+			 //          <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+			 //            <span className="sr-only">Toggle navigation</span>
+			 //            <span className="icon-bar"></span>
+			 //            <span className="icon-bar"></span>
+			 //            <span className="icon-bar"></span>
+			 //          </button>
+			 //          <a className="navbar-brand" href="#"><img id="hedge_logo" src="assets/images/hedge_logo.jpeg" alt="HTS"/></a>
+			 //        </div>
+			 //        <div className="navbar-collapse collapse">
+			 //          <form className="navbar-form navbar-right" role="form">
+			 //            <div className="form-group">
+			 //              <input type="text" placeholder="username" className="form-control" valueLink={this.linkState('name')}/>
+			 //            </div><br/>
+			 //            <div  className="form-group">
+			 //              <input type="password" placeholder="Password" className="form-control" valueLink={this.linkState('password')}/>
+			 //            </div><br/>
+			 //            <div  className="form-group">
+			 //              <input type="email" placeholder="email address" className="form-control" valueLink={this.linkState('email')}/>
+			 //            </div><br/>			          
+			 //            <button  className="btn btn-success" onMouseUp={this.handleSubmit}>Create User {this.linkState('name')}</button>
+			 //            <br/>
+				// 		<label>Already have an account?</label> <a href="/login">Login Here</a>
+			 //          </form>
+			 //        </div>
+			 //    </div>
+			 //  </div>;
     	
   	}
 });

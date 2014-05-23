@@ -30,7 +30,7 @@ object Global extends GlobalSettings {
 
   def checkWriteAccess(request : RequestHeader, uval : JsValue): Option[Handler] = {
     val isSystem = ((uval \ "role").as[String]).contains("system")
-    println(request.path)
+    
       request.method match {
         case "GET" => super.onRouteRequest(request)
         case _ if(isSystem==true && request.path!="/login") => Some(Action { Unauthorized("System account cannot be updated. Connect as a different User.") })

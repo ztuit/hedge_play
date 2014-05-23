@@ -56,13 +56,15 @@ var messageThread = React.createClass({
 	render : function() {
 		
       var subject = "";
+      var recipient = ""
 	    var messageEntries = this.props.entries.map(function (messageEnt) {
         subject = messageEnt.subject;
+        recipient = messageEnt.recipient;
 	      return <messageEntry entry={messageEnt} />;
 	    });
 
     	return <div className="messagethread">
-                <label id="subject">{subject}</label>
+                <label id="subject">To {recipient} : {subject}</label>
     				    {messageEntries}
     	    		 <button  className="btn btn-success"  onMouseUp={this.reply} >Reply</button>
                <br/><br/>
