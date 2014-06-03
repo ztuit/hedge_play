@@ -30,7 +30,7 @@ var blogEntries = React.createClass({
 		    });
 		    return (<div className="blogList panel panel-primary body-padding">
 		    			<div>
-		    				<blogEditor entry={{key:"", content:"", created:"", edited:""}} router={self.props.router}/>
+		    				<blogEditor entry={{key:"", content:"", created:"", edited:""}} router={self.props.router} view={self}/>
 		    				<br/><br/>
 		    			</div>
 				   		<div>
@@ -142,7 +142,7 @@ var blogEntries = React.createClass({
  					
  					{newEntry}
     				<textarea id={this.state.id} valueLink={this.linkState('content')} ></textarea><br/>    				
-    				<input type="button" value="Save/Update" onMouseUp={this.save}/><input type="button" value="Delete" onMouseUp={this.deleteEntry}/>
+    				<button className="btn btn-success" onMouseUp={this.save}>Save/Update</button><button  className="btn btn-warning"  onMouseUp={this.deleteEntry}>Delete</button>
     				<label>{this.linkState('info')}</label>
     			</div>);
 	  }

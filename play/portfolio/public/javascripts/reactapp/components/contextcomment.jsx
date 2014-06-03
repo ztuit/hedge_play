@@ -29,7 +29,7 @@ var contextCommentViewer = React.createClass({
 	    });
 	    return (<div className="contextCommentViewer">
 	    			<div>
-	    				<contextCommentEditor contextBucket={this.props.contextBucket} contextKey={this.props.contextKey}/>
+	    				<contextCommentEditor contextBucket={this.props.contextBucket} contextKey={this.props.contextKey} view={this}/>
 	    				<br/><br/>
 	    			</div>
 			   		<div>
@@ -60,6 +60,7 @@ var contextCommentEditor = React.createClass({
 		blog.save(null, {
 			success: function (model, response) {
         		self.setState({info:"comment entry saved"});
+        		self.props.view.componentWillMount();
         	},
     		error: function (model, response) {
     			self.setState({info:"comment entry save failed"});

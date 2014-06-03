@@ -11,8 +11,11 @@ var headerItems = React.createClass({
 							<div className="col-sm-4">
 								<a  href="#"><img id="hedge_logo" className="headerBrand" src="assets/images/hedge_logo.png" alt="HTS"/></a>
 				        	</div>
-				        	<div className="col-sm-1 col-sm-offset-5 col-md-1 col-md-offset-6">
-					    		<img id="riak_logo" src="assets/images/riakpowered.jpeg" alt="riak"/>
+				        	<div className="col-sm-1 col-sm-offset-3 col-md-1 col-md-offset-4">
+					    		<a href="http://basho.com/"><img id="riak_logo" src="assets/images/riakpowered.jpeg" alt="riak"/></a>
+					    	</div>
+					    	<div className="col-sm-1 col-sm-offset-1 col-md-1 col-md-offset-1">
+					    		<a href="http://www.playframework.com/"><img id="riak_logo" height="42" width="80" src="assets/images/play.png" alt="riak"/></a>
 					    	</div>
 					    </div>
 

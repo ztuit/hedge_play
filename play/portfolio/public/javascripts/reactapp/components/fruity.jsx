@@ -284,7 +284,7 @@ var fruitMachineContainer =  React.createClass({
 		return <div>
 			<label>Current score:</label><br/>
 			<canvas id="fruityCanvas">Machine</canvas><br/>
-			<input type="button" onMouseUp={this.spinRollers}/>
+			<button className="btn btn-success" onMouseUp={this.spinRollers}>Spin</button>
 			<label>Leader Board</label><br/>
 			<contextCommentViewer contextBucket="Sandcastle" contextKey="fruity" />   
 		</div>;

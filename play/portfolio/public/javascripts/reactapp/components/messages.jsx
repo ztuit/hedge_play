@@ -36,7 +36,7 @@ var messageViewer = React.createClass({
 	    });
     	return <div className="messageViewer panel panel-primary body-padding">
             <div style={{display: this.props.allowSend}}><label>New message thread</label><br/>
-            <messageSender url={this.props.url} previous="" /><br/></div>
+            <messageSender url={this.props.url} previous="" view={this}/><br/></div>
     				<label>Current Message Threads</label><br/><br/>
     				{mThread}<br/>
     			</div>
@@ -119,6 +119,7 @@ var messageEntry = React.createClass({
   		message.save(null, {
 			success: function (model, response) {
         		self.setState({info:"message sent"});
+            self.props.view.componentWillMount();
         	},
     		error: function (model, response) {
           var msg = "message send failed, reason: " + response.responseText;
