@@ -14,6 +14,8 @@ import com.basho.riak.client.RiakLink
 import com.basho.riak.client.bucket.Bucket
 import com.basho.riak.client.query.WalkResult;
 import com.basho.riak.client.query.indexes.BinIndex
+import play.api.Play
+
 
 class RiakException extends Exception
 
@@ -27,7 +29,8 @@ class RiakContent( v : JsValue) {
 
 object RiakClientWrapper {
 	
-	private var client = RiakFactory.httpClient("http://localhost:8098/riak")
+	private val riakIp = Play.current.configuration.getString("portfolio.riakip");
+	private var client = RiakFactory.httpClient("http://" + riakIp.get + "/riak")
 
 
 

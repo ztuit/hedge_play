@@ -73,7 +73,7 @@ object User  {
 		mail.setSubject("mailer")
 		mail.addRecipient(u.email)
 		//or use a list
-		mail.addFrom("stuart.mailme@gmail.com")
+		mail.addFrom("stuart@hedgetechnologysolutions.com")
 		//sends text/text
 		mail.send( "test email send" )
 	}
